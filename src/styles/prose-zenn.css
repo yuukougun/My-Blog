@@ -1,0 +1,68 @@
+.prose-zenn {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+}
+
+.prose-zenn h1,
+.prose-zenn h2,
+.prose-zenn h3,
+.prose-zenn h4 {
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.prose-zenn h2,
+.prose-zenn h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.prose-zenn p {
+  margin: 0.8rem 0;
+}
+
+.prose-zenn pre {
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.message-block {
+  margin: 1.2rem 0;
+  border: 1px solid;
+  padding: 12px 14px;
+}
+
+.message-info {
+  background: var(--message-info-bg);
+  border-color: var(--message-info-border);
+}
+
+.message-warn {
+  background: var(--message-warn-bg);
+  border-color: var(--message-warn-border);
+}
+
+.message-alert {
+  background: var(--message-alert-bg);
+  border-color: var(--message-alert-border);
+}
+
+.ogp-link-card {
+  display: grid;
+  gap: 6px;
+  border: 1px solid var(--border-default);
+  background: #f8fafc;
+  padding: 12px;
+}
+
+.ogp-link-card strong {
+  color: var(--text-primary);
+}
+
+.ogp-link-card span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}

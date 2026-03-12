@@ -1,0 +1,10 @@
+memo*
+*.log
+.env
+.spec-workflow
+node_modules
+.next
+out
+.vercel
+.DS_Store
+coverage

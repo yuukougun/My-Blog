@@ -1,0 +1,280 @@
+@import "./tokens.css";
+@import "./prose-zenn.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--surface-base);
+  color: var(--text-primary);
+}
+
+.site-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid var(--border-default);
+  background: color-mix(in srgb, var(--surface-base) 85%, #fff 15%);
+}
+
+.site-header-inner {
+  margin: 0 auto;
+  max-width: 1080px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.site-brand {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 700;
+}
+
+.menu-trigger {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border-default);
+  background: var(--surface-panel);
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.menu-trigger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #334155;
+}
+
+.mobile-menu-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.mobile-menu-overlay {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.mobile-menu-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(300px, 82vw);
+  background: var(--surface-panel);
+  border-left: 1px solid var(--border-default);
+  padding: 28px 20px;
+}
+
+.mobile-menu-panel ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.mobile-menu-panel a {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border-default);
+  background: var(--surface-muted);
+}
+
+.site-footer-inner {
+  margin: 0 auto;
+  max-width: 1080px;
+  padding: 18px 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-footer-inner p {
+  margin: 0;
+  color: #334155;
+}
+
+.site-footer-inner ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: inline-flex;
+  gap: 14px;
+}
+
+.page-wrap {
+  margin: 0 auto;
+  max-width: 1080px;
+  padding: 24px 16px 32px;
+  display: grid;
+  gap: 22px;
+}
+
+.hero-panel,
+.section-panel {
+  border: 1px solid var(--border-default);
+  background: var(--surface-panel);
+  padding: 20px;
+}
+
+.hero-panel h1,
+.section-panel h2 {
+  margin: 0 0 12px;
+}
+
+.hero-panel p {
+  margin: 0;
+  line-height: 1.7;
+  color: #334155;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.content-card {
+  border: 1px solid var(--border-default);
+  background: var(--surface-panel);
+  overflow: hidden;
+}
+
+.content-card-image-wrap {
+  border-bottom: 1px solid #d5dae0;
+  aspect-ratio: 16 / 9;
+  background: #e2e8f0;
+}
+
+.content-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content-card-body {
+  padding: 14px;
+}
+
+.content-card-date {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.content-card-body h3 {
+  margin: 10px 0 8px;
+  font-size: 1.2rem;
+}
+
+.content-card-body p {
+  margin: 0;
+  color: #334155;
+}
+
+@media (min-width: 760px) {
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.article-layout {
+  border: 1px solid var(--border-default);
+  background: var(--surface-panel);
+}
+
+.article-cover {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.article-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.article-header h1 {
+  margin: 0;
+}
+
+.article-header p {
+  margin: 8px 0 0;
+  color: #334155;
+}
+
+.toc-panel {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.toc-panel p {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.toc-panel ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.article-body {
+  padding: 20px;
+}
+
+.article-body pre {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .site-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

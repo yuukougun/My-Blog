@@ -1,8 +1,5 @@
 import { Client } from "@notionhq/client";
 import { NotionToMarkdown } from "notion-to-md";
-import { mapNotionProject } from "@/lib/content/mapper";
-import { withRetry } from "@/lib/content/retry";
-import type { ProjectItem } from "@/types/content";
 
 const REQUIRED_NOTION_ENV = ["NOTION_TOKEN", "NOTION_PROJECTS_DATABASE_ID"] as const;
 

@@ -99,30 +99,19 @@ function getMultiSelectNames(property: unknown): string[] | undefined {
 }
 
 
-// ページ型プロパティからリンク先ページIDを取得
-function getLinkedPageId(property: unknown): string | undefined {
-  if (!property || typeof property !== "object" || !("relation" in property)) return undefined;
-  const rel = (property as { relation?: Array<{ id: string }> }).relation;
-  if (Array.isArray(rel) && rel.length > 0 && rel[0].id) return rel[0].id;
-  // ページ型プロパティがrelationでない場合（Notion API v2022-06-28以降はpage_id型）
-  if (Array.isArray(property) && property.length > 0 && property[0].id) return property[0].id;
-  if ((property as any).id) return (property as any).id;
-  return undefined;
-}
-
 async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<RawNotionProject> {
   const properties = page.properties ?? {};
   let bodyMarkdown = "";
   try {
     bodyMarkdown = await fetchProjectPageMarkdown(page.id);
-  } catch (e) {
+  } catch {
     bodyMarkdown = "";
   }
   // publishedAt: created_time型から取得
   let publishedAt: string | undefined = undefined;
-  const publishedAtProp = properties.publishedAt as any;
+  const publishedAtProp = properties.publishedAt;
   if (publishedAtProp && typeof publishedAtProp === "object" && "created_time" in publishedAtProp) {
-    publishedAt = publishedAtProp.created_time;
+    publishedAt = (publishedAtProp as { created_time: string }).created_time;
   }
   // summary: 本文の「## 概要」または「### 概要」見出し直下のテキストを抽出
   let summary = undefined;
@@ -168,7 +157,7 @@ export async function fetchProjects(): Promise<ProjectItem[]> {
   // notion.databases.queryでDB直指定
   const response = await withRetry(
     () =>
-      (notion as any).databases.query({
+      notion.databases.query({
         database_id: databaseId,
         page_size: 100,
         // 必要ならfilter/sort追加

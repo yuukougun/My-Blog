@@ -20,8 +20,8 @@ export default function ContentCard({ item }: ContentCardProps) {
             <span className="content-card-kind">{kind}</span>
             <p className="content-card-date">{item.publishedAt}</p>
           </div>
-          <h3>{item.title}</h3>
-          <p>{item.summary}</p>
+          <h3 style={{ fontSize: "1.35rem", fontWeight: 700 }}>{item.title}</h3>
+          <p style={{ fontSize: "1.1rem", fontWeight: 500 }}>{item.summary}</p>
         </div>
       </Link>
     </article>

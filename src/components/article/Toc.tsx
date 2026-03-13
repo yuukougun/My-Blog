@@ -10,8 +10,8 @@ export default function Toc({ items }: TocProps) {
   }
 
   return (
-    <aside className="toc-panel">
-      <p>Table of Contents</p>
+    <aside className="toc-panel" aria-label="目次">
+      <p>目次</p>
       <ul>
         {items.map((item) => (
           <li key={item.id} className={`toc-level-${item.level}`}>

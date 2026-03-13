@@ -66,12 +66,19 @@ export function mapDevLog(input: {
 }
 
 export function toCardItem(input: Pick<ProjectItem | DevLogItem, "id" | "title" | "summary" | "coverImage" | "publishedAt" | "slug">, basePath: "/projects" | "/devlog"): CardItem {
+  // 日付をYYYY-MM-DD形式で整形
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toISOString().slice(0, 10);
+  };
   return {
     id: input.id,
     title: input.title,
     summary: input.summary,
     image: input.coverImage,
-    publishedAt: input.publishedAt,
+    publishedAt: formatDate(input.publishedAt),
     href: `${basePath}/${input.slug}`,
   };
 }

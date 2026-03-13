@@ -34,30 +34,25 @@
 .prose-zenn h3 {
   margin-top: 2rem;
   margin-bottom: 0.8rem;
-  border-left: 4px solid #0f766e;
+  border-left: 4px solid #38bdf8; /* 水色 (sky-400) */
   padding-left: 12px;
 }
 
-.prose-zenn p {
-  margin: 0.9rem 0;
+.prose-zenn table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+}
+.prose-zenn th, .prose-zenn td {
+  border: 1px solid #d1d5db;
+  padding: 0.6em 1em;
+  text-align: left;
+}
+.prose-zenn th {
+  background: #f1f5f9;
+  font-weight: bold;
 }
 
-.prose-zenn pre {
-  background: linear-gradient(180deg, #0b1220, #111a2d);
-  color: #e2e8f0;
-  padding: 1.1rem 1.2rem;
-  overflow-x: auto;
-  border-radius: 12px;
-  border: 1px solid #1e3a8a;
-}
-
-.prose-zenn code {
-  background: #eff6ff;
-  color: #1e3a8a;
-  padding: 0.14rem 0.34rem;
-  border-radius: 6px;
-  font-size: 0.92em;
-}
 
 .prose-zenn pre code {
   background: transparent;

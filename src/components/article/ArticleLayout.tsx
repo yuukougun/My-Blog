@@ -15,8 +15,8 @@ export default function ArticleLayout({ coverImage, title, summary, toc, html }:
     <article className="article-layout">
       <img src={coverImage} alt={title} className="article-cover" />
       <header className="article-header">
-        <h1>{title}</h1>
-        <p>{summary}</p>
+        <h1 style={{ fontSize: "2.2rem", fontWeight: 800 }}>{title}</h1>
+        <p style={{ fontSize: "1.25rem", fontWeight: 600 }}>{summary}</p>
       </header>
       <Toc items={toc} />
       <section className="article-body prose-zenn">

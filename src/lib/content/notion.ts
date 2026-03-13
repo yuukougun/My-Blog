@@ -113,9 +113,12 @@ async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<Raw
   if (publishedAtProp && typeof publishedAtProp === "object" && "created_time" in publishedAtProp) {
     publishedAt = (publishedAtProp as { created_time: string }).created_time;
   }
-  // summary: 本文の「## 概要」または「### 概要」見出し直下のテキストを抽出
+  // summary: 本文の「## 概要」または「### 概要」見出し直下のテキストを抽出し、概要見出しとその内容をMarkdownから除去
   let summary = undefined;
+  let bodyWithoutOverview = bodyMarkdown;
   if (bodyMarkdown) {
+    // 概要見出しとその内容（次の見出しまで）を除去
+    bodyWithoutOverview = bodyMarkdown.replace(/^#{2,4}\s*概要\s*\n+[\s\S]*?(?=^#{2,4}\s|\n*$)/m, "");
     const overviewMatch = bodyMarkdown.match(/^#{2,4}\s*概要\s*\n+([\s\S]*?)(\n#|$)/m);
     if (overviewMatch) {
       summary = overviewMatch[1].split("\n").map(line => line.trim()).filter(Boolean)[0];
@@ -126,6 +129,8 @@ async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<Raw
       summary = match ? match[1].replace(/^#+\s*/, "").trim() : undefined;
     }
   }
+  // bodyMarkdownを概要除去後のものに差し替え
+  bodyMarkdown = bodyWithoutOverview;
   // title: pageカラム（Notionのタイトル列）
   let title = getTextFromTitleProperty(properties.page);
   if (!title) title = "Untitled";
@@ -168,11 +173,6 @@ export async function fetchProjects(): Promise<ProjectItem[]> {
   // 型アサーションで型エラーを回避
   const rawPages = (response as { results: NotionPageResult[] }).results;
   const projects: ProjectItem[] = [];
-  if (rawPages.length > 0) {
-    // デバッグ: 1件目のproperties構造を出力
-    // eslint-disable-next-line no-console
-    console.log("[Notion debug] 1st page properties:", JSON.stringify(rawPages[0].properties, null, 2));
-  }
   for (const page of rawPages) {
     const raw = await normalizeRawPageWithMarkdown(page);
     projects.push(mapNotionProject(raw));

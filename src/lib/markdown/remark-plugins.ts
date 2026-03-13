@@ -25,11 +25,12 @@ function extractToc(markdown: string): TocItem[] {
     if (!match) continue;
     const level = Math.min(4, Math.max(2, match[1].length)) as 2 | 3 | 4;
     const text = match[2].trim();
+    // 日本語もidに含める（全角→半角変換、記号除去、スペース→-）
     let id = text
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .trim()
-      .replace(/\s+/g, "-");
+      .normalize("NFKC")
+      .replace(/[^\p{L}\p{N}\s-]/gu, "")
+      .replace(/\s+/g, "-")
+      .toLowerCase();
     if (!id) id = `toc-${idx}`;
     items.push({ id, text, level });
     idx++;
@@ -50,8 +51,8 @@ function rehypeAddHeadingIds(toc: TocItem[]) {
         if (tocItem) {
           node.properties = node.properties || {};
           node.properties.id = tocItem.id;
-          idx++;
         }
+        idx++;
       }
     });
   };
@@ -67,12 +68,18 @@ export async function renderMarkdown(markdown: string): Promise<{ html: string; 
     .use(rehypeRaw)
     .use(rehypeAddHeadingIds(toc))
     .use(rehypeSanitize, {
-      tagNames: ["div", "p", "a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "blockquote", "strong", "em", "img", "hr"],
+      tagNames: [
+        "div", "p", "a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "blockquote", "strong", "em", "img", "hr",
+        "table", "thead", "tbody", "tr", "th", "td"
+      ],
       attributes: {
         div: ["className"],
         a: ["href", "target", "rel"],
         img: ["src", "alt"],
         code: ["className"],
+        table: ["className"],
+        th: ["colspan", "rowspan", "scope"],
+        td: ["colspan", "rowspan"],
       },
     })
     .use(rehypeHighlight)

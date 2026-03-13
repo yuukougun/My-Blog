@@ -1,3 +1,20 @@
+.prose-zenn table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+}
+.prose-zenn th, .prose-zenn td {
+  border: 1px solid #d1d5db;
+  padding: 0.6em 1em;
+  text-align: left;
+}
+.prose-zenn th {
+  background: #f1f5f9;
+  font-weight: bold;
+}
+.prose-zenn tr + tr {
+  border-top: 2px solid #e5e7eb;
+}
 .prose-zenn {
   font-size: 1.1rem;
   line-height: 1.95;

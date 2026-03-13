@@ -118,17 +118,33 @@ async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<Raw
   } catch (e) {
     bodyMarkdown = "";
   }
-  // publishedAt（日付型）
+  // publishedAt: created_time型から取得
   let publishedAt: string | undefined = undefined;
   const publishedAtProp = properties.publishedAt as any;
-  if (publishedAtProp && typeof publishedAtProp === "object" && "date" in publishedAtProp && publishedAtProp.date?.start) {
-    publishedAt = publishedAtProp.date.start;
+  if (publishedAtProp && typeof publishedAtProp === "object" && "created_time" in publishedAtProp) {
+    publishedAt = publishedAtProp.created_time;
   }
+  // summary: 本文の「## 概要」または「### 概要」見出し直下のテキストを抽出
+  let summary = undefined;
+  if (bodyMarkdown) {
+    const overviewMatch = bodyMarkdown.match(/^#{2,4}\s*概要\s*\n+([\s\S]*?)(\n#|$)/m);
+    if (overviewMatch) {
+      summary = overviewMatch[1].split("\n").map(line => line.trim()).filter(Boolean)[0];
+    }
+    if (!summary) {
+      // fallback: 最初の段落
+      const match = bodyMarkdown.match(/^(.*?)(\n|$)/);
+      summary = match ? match[1].replace(/^#+\s*/, "").trim() : undefined;
+    }
+  }
+  // title: pageカラム（Notionのタイトル列）
+  let title = getTextFromTitleProperty(properties.page);
+  if (!title) title = "Untitled";
   return {
     id: page.id,
     slug: getTextFromRichTextProperty(properties.slug),
-    title: getTextFromTitleProperty(properties.title),
-    summary: undefined, // 概要は本文から抽出するためここでは空
+    title,
+    summary,
     coverImage: page.cover?.external?.url ?? page.cover?.file?.url,
     publishedAt,
     tags: getMultiSelectNames(properties.tags),
@@ -163,6 +179,11 @@ export async function fetchProjects(): Promise<ProjectItem[]> {
   // 型アサーションで型エラーを回避
   const rawPages = (response as { results: NotionPageResult[] }).results;
   const projects: ProjectItem[] = [];
+  if (rawPages.length > 0) {
+    // デバッグ: 1件目のproperties構造を出力
+    // eslint-disable-next-line no-console
+    console.log("[Notion debug] 1st page properties:", JSON.stringify(rawPages[0].properties, null, 2));
+  }
   for (const page of rawPages) {
     const raw = await normalizeRawPageWithMarkdown(page);
     projects.push(mapNotionProject(raw));

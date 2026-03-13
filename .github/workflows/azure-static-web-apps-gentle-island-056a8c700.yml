@@ -50,8 +50,8 @@ jobs:
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
         env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN}}
-          NOTION_PROJECTS_DATABASE_ID: ${{secrets.NOTION_PROJECTS_DATABASE_ID}}
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_PROJECTS_DATABASE_ID: ${{ secrets.NOTION_PROJECTS_DATABASE_ID }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

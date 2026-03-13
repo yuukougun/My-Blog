@@ -17,6 +17,15 @@ export default function Header() {
           <Image src={siteConfig.iconPath} alt="Site icon" width={28} height={28} />
           <span>{siteConfig.title}</span>
         </Link>
+        <nav className="site-nav-desktop" aria-label="Main navigation">
+          <ul>
+            {navigationItems.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href}>{item.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <button
           type="button"
           className="menu-trigger"

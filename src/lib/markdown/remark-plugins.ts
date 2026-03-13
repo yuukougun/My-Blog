@@ -40,11 +40,12 @@ function extractToc(markdown: string): TocItem[] {
 
 // rehypeプラグイン: h2/h3/h4にid属性を付与
 import { visit } from "unist-util-visit";
+import type { Root } from "hast";
 function rehypeAddHeadingIds(toc: TocItem[]) {
   let idx = 0;
-  return (tree: any) => {
+  return (tree: Root) => {
     if (!tree) return;
-    visit(tree, "element", (node: any) => {
+    visit(tree, "element", (node) => {
       if (!node || typeof node !== "object" || !("tagName" in node)) return;
       if (["h2", "h3", "h4"].includes(node.tagName)) {
         const tocItem = toc[idx];
@@ -66,7 +67,7 @@ export async function renderMarkdown(markdown: string): Promise<{ html: string; 
     .use(remarkGfm)
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
-    .use(rehypeAddHeadingIds(toc))
+    .use(() => rehypeAddHeadingIds(toc))
     .use(rehypeSanitize, {
       tagNames: [
         "div", "p", "a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "blockquote", "strong", "em", "img", "hr",

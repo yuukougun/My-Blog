@@ -1,5 +1,6 @@
 import { Client } from "@notionhq/client";
 import { mapNotionProject } from "@/lib/content/mapper";
+import { fetchProjectPageMarkdown } from "@/lib/content/notion-md";
 import { withRetry } from "@/lib/content/retry";
 import type { ProjectItem } from "@/types/content";
 
@@ -97,20 +98,43 @@ function getMultiSelectNames(property: unknown): string[] | undefined {
   return value.map((item) => item.name).filter((name): name is string => typeof name === "string");
 }
 
-function normalizeRawPage(page: NotionPageResult): RawNotionProject {
-  const properties = page.properties ?? {};
 
+// ページ型プロパティからリンク先ページIDを取得
+function getLinkedPageId(property: unknown): string | undefined {
+  if (!property || typeof property !== "object" || !("relation" in property)) return undefined;
+  const rel = (property as { relation?: Array<{ id: string }> }).relation;
+  if (Array.isArray(rel) && rel.length > 0 && rel[0].id) return rel[0].id;
+  // ページ型プロパティがrelationでない場合（Notion API v2022-06-28以降はpage_id型）
+  if (Array.isArray(property) && property.length > 0 && property[0].id) return property[0].id;
+  if ((property as any).id) return (property as any).id;
+  return undefined;
+}
+
+async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<RawNotionProject> {
+  const properties = page.properties ?? {};
+  let bodyMarkdown = "";
+  try {
+    bodyMarkdown = await fetchProjectPageMarkdown(page.id);
+  } catch (e) {
+    bodyMarkdown = "";
+  }
+  // publishedAt（日付型）
+  let publishedAt: string | undefined = undefined;
+  const publishedAtProp = properties.publishedAt as any;
+  if (publishedAtProp && typeof publishedAtProp === "object" && "date" in publishedAtProp && publishedAtProp.date?.start) {
+    publishedAt = publishedAtProp.date.start;
+  }
   return {
     id: page.id,
     slug: getTextFromRichTextProperty(properties.slug),
     title: getTextFromTitleProperty(properties.title),
-    summary: getTextFromRichTextProperty(properties.summary),
+    summary: undefined, // 概要は本文から抽出するためここでは空
     coverImage: page.cover?.external?.url ?? page.cover?.file?.url,
-    publishedAt: getTextFromRichTextProperty(properties.publishedAt),
+    publishedAt,
     tags: getMultiSelectNames(properties.tags),
-    bodyMarkdown: getTextFromRichTextProperty(properties.bodyMarkdown),
-    repositoryUrl: getTextFromRichTextProperty(properties.repositoryUrl),
-    demoUrl: getTextFromRichTextProperty(properties.demoUrl),
+    bodyMarkdown,
+    repositoryUrl: undefined,
+    demoUrl: undefined,
   };
 }
 
@@ -125,23 +149,25 @@ export async function fetchProjects(): Promise<ProjectItem[]> {
   const notion = getNotionClient();
   const databaseId = process.env.NOTION_PROJECTS_DATABASE_ID!;
 
+  // notion.databases.queryでDB直指定
   const response = await withRetry(
     () =>
-      notion.search({
-        query: "",
+      (notion as any).databases.query({
+        database_id: databaseId,
         page_size: 100,
-        filter: {
-          property: "object",
-          value: "page",
-        },
+        // 必要ならfilter/sort追加
       }),
     { maxAttempts: 3, initialDelayMs: 400 },
   );
 
-  const rawProjects = (response.results as NotionPageResult[])
-    .filter((entry) => entry.parent?.database_id === databaseId)
-    .map(normalizeRawPage);
-  return rawProjects.map(mapNotionProject);
+  // 型アサーションで型エラーを回避
+  const rawPages = (response as { results: NotionPageResult[] }).results;
+  const projects: ProjectItem[] = [];
+  for (const page of rawPages) {
+    const raw = await normalizeRawPageWithMarkdown(page);
+    projects.push(mapNotionProject(raw));
+  }
+  return projects;
 }
 
 export async function fetchProjectBySlug(slug: string): Promise<ProjectItem | null> {

@@ -2,8 +2,12 @@ import CardGrid from "@/components/cards/CardGrid";
 import { fetchProjects } from "@/lib/content/notion";
 import { toCardItem } from "@/lib/content/mapper";
 
+
 export default async function ProjectsPage() {
   const projects = await fetchProjects();
+  // デバッグ用: 取得したprojects配列を出力
+  // eslint-disable-next-line no-console
+  console.log("projects", projects);
   const cards = projects.map((project) => toCardItem(project, "/projects"));
 
   return (

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import ArticleLayout from "@/components/article/ArticleLayout";
 import { fetchDevLogBySlug } from "@/lib/content/devlog-source";
-import { renderArticleHtml } from "@/lib/markdown/rehype-plugins";
+import { renderMarkdown } from "@/lib/markdown/remark-plugins";
 import { generateStaticDevLogParams } from "./generateStaticParams";
 
 type DevLogDetailPageProps = {
@@ -20,14 +20,15 @@ export default async function DevLogDetailPage({ params }: DevLogDetailPageProps
     notFound();
   }
 
-  const article = await renderArticleHtml(entry.bodyMarkdown);
+  const article = await renderMarkdown(entry.bodyMarkdown);
+  const summaryHtml = entry.summary ? (await renderMarkdown(entry.summary)).html : "";
 
   return (
     <main className="page-wrap">
       <ArticleLayout
         coverImage={entry.coverImage}
         title={entry.title}
-        summary={entry.summary}
+        summaryHtml={summaryHtml}
         toc={article.toc}
         html={article.html}
       />

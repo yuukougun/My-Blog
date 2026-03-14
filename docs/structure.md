@@ -1,36 +1,54 @@
-# リポジトリ構成と主要ファイル解説
+# リポジトリ構成と編集ガイド
 
-主要なディレクトリ（抜粋）:
+## 主要ディレクトリ
 
-- `src/app/` — ルーティングとページ
-  - `layout.tsx` — 全ページ共通レイアウト (ヘッダ／フッタを含む)
-  - `page.tsx` — ホームページ
-  - `devlog/[id]/` — 動的ルート（個別記事）
+- `src/app/`:
+  - App Router のページ本体
+  - `projects/[id]`, `devlog/[id]` は記事詳細ページ
+  - `generateStaticParams.ts` で SSG 用のルートを生成
 
-- `src/components/` — UI コンポーネント
-  - `layout/Header.tsx` — サイト上部のナビ／ロゴ
-  - `layout/Footer.tsx` — フッタ
-  - `article/ArticleLayout.tsx` — 記事ページのテンプレート
-  - `cards/ContentCard.tsx` — 記事一覧カード
+- `src/components/`:
+  - `layout/`: ヘッダ、フッタ、モバイルメニュー
+  - `cards/`: 一覧カード表示
+  - `article/`: 記事ページ表示（本文、TOC、TOCボタン）
 
-- `content/` — Markdown の生ファイル（例: `content/devlog/*.md`）
+- `src/lib/content/`:
+  - `notion.ts`: Project データ取得
+  - `markdown.ts`: DevLog のローカル Markdown 取得
+  - `zenn.ts`: DevLog の外部フィード取得
+  - `devlog-source.ts`: DevLog ソース切替
+  - `mapper.ts`: 生データからアプリ型へ変換
 
-- `lib/` — データの読み込み/変換ロジック
-  - `lib/config/site.ts` — サイト名や説明などの設定
-  - `lib/content/devlog-source.ts` — `content/devlog` をどう読み込むか
-  - `lib/markdown/mapper.ts` — frontmatter をページデータ型に変換
-  - `lib/markdown/rehype-plugins.ts`, `remark-plugins.ts` — Markdown パースプラグイン
+- `src/lib/markdown/`:
+  - `remark-plugins.ts`: Markdown → HTML + TOC 生成
 
-- `src/styles/` — グローバル CSS とトークン
-  - `globals.css`, `tokens.css`, `prose-zenn.css`
+- `src/lib/hooks/`:
+  - `useEscapeKey.ts`: ダイアログ系 UI の Escape 閉じる共通処理
 
-- `public/` / `image/` — 静的アセット（画像等）
+- `src/content/`:
+  - `about.md`: About ページ本文
+  - `devlog/*.md`: DevLog のローカル記事
 
-- `types/` — TypeScript の型定義（記事データ型など）
+- `src/styles/`:
+  - `tokens.css`: デザイントークン
+  - `globals.css`: 共通スタイル
+  - `zenn-custom.css`: 記事本文の見た目調整
 
-よく編集するファイルと変更効果:
+- `tests/`:
+  - `content/`, `markdown/`, `routes/` 単位でテスト配置
 
-- `lib/config/site.ts` — サイトタイトル・デフォルトのメタを変更すると、HTML の title、OGP、ヘッダの表示に反映されます。
-- `src/components/layout/Header.tsx` — ヘッダのテキストやナビリンクを追加・変更します。
-- `src/styles/tokens.css` と `tailwind.config.ts` — 色やフォントのカスタムを行うと全体スタイルに影響します。
-- `content/devlog/*.md` — 記事を追加/編集すると個別ページや一覧に反映されます（ビルド/再起動で SSG 反映）。
+## 編集ルール（このリポジトリ向け）
+
+- Markdown の変換ロジックは `src/lib/markdown/remark-plugins.ts` に集約する
+- 記事ページの `summary` は Markdown として扱い、`renderMarkdown` で `summaryHtml` に変換して渡す
+- Project/DevLog 一覧カードは `toCardItem` 経由で作る
+- 環境変数は `.env.example` を正とし、実値は `.env` のみで管理する
+- `notion-md-cache/` は生成物として扱い、Git 管理しない
+
+## よく編集するファイル
+
+- `src/lib/config/site.ts`: サイト名やメタ情報
+- `src/lib/config/navigation.ts`: ナビゲーションリンク
+- `src/components/layout/Header.tsx`: ヘッダ UI
+- `src/styles/tokens.css`: 色、余白、タイポの基準
+- `src/content/devlog/*.md`: ローカル記事の追加・更新

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
 import type { NavItem } from "@/lib/config/navigation";
+import { useEscapeKey } from "@/lib/hooks/useEscapeKey";
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -11,20 +11,7 @@ type MobileMenuProps = {
 };
 
 export default function MobileMenu({ isOpen, items, onClose }: MobileMenuProps) {
-
-
-
-  // Escapeキーで閉じる
-  useEffect(() => {
-    if (!isOpen) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isOpen, onClose]);
+  useEscapeKey(isOpen, onClose);
 
   if (!isOpen) {
     return null;

@@ -1,5 +1,5 @@
 import type { TocItem } from "@/types/article";
-import { useEffect } from "react";
+import { useEscapeKey } from "@/lib/hooks/useEscapeKey";
 
 type TocProps = {
   items: TocItem[];
@@ -11,15 +11,9 @@ type TocProps = {
 export default function Toc({ items, mode = "panel", onClose, onLinkClick }: TocProps) {
   if (items.length === 0) return null;
 
-  // Escapeキーで閉じる（dialog時のみ）
-  useEffect(() => {
-    if (mode !== "dialog" || !onClose) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [mode, onClose]);
+  useEscapeKey(mode === "dialog" && Boolean(onClose), () => {
+    onClose?.();
+  });
 
   if (mode === "dialog") {
     return (

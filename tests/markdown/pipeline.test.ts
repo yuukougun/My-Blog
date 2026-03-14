@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { renderArticleHtml } from "@/lib/markdown/rehype-plugins";
+import { renderMarkdown } from "@/lib/markdown/remark-plugins";
 
-describe("renderArticleHtml", () => {
+describe("renderMarkdown", () => {
   it("renders message blocks and generates toc entries", async () => {
     const markdown = "## Heading\n\n:::message info\nHello block\n:::";
-    const result = await renderArticleHtml(markdown);
+    const result = await renderMarkdown(markdown);
 
     expect(result.toc[0].text).toBe("Heading");
     expect(result.html).toContain("message-block");

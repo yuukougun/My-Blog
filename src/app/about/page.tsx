@@ -1,9 +1,9 @@
 import { fetchAboutMarkdown } from "@/lib/content/about";
-import { renderArticleHtml } from "@/lib/markdown/rehype-plugins";
+import { renderMarkdown } from "@/lib/markdown/remark-plugins";
 
 export default async function AboutPage() {
   const markdown = await fetchAboutMarkdown();
-  const article = await renderArticleHtml(markdown);
+  const article = await renderMarkdown(markdown);
 
   return (
     <main className="page-wrap">

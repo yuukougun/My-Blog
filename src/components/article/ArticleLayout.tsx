@@ -26,22 +26,24 @@ export default function ArticleLayout({ coverImage, title, summaryHtml, toc, htm
   }, []);
 
   return (
-    <article className="article-layout">
-      <img src={coverImage} alt={title} className="article-cover" />
-      <header className="article-header">
-        <h1 style={{ fontSize: "2.2rem", fontWeight: 800 }}>{title}</h1>
-        {summaryHtml && (
-          <div className="znc" style={{ fontSize: "1.25rem", fontWeight: 600 }} dangerouslySetInnerHTML={{ __html: summaryHtml }} />
-        )}
-      </header>
-      {isDesktop ? <Toc items={toc} /> : <TocButton items={toc} />}
-      <section className="article-body">
-        {isEmpty ? (
-          <div className="article-fallback">No content or unsupported block.</div>
-        ) : (
-          <div className="znc" dangerouslySetInnerHTML={{ __html: html }} />
-        )}
-      </section>
-    </article>
+    <div className="page-2col">
+      <article className="article-layout">
+        <img src={coverImage} alt={title} className="article-cover" />
+        <header className="article-header">
+          <h1 style={{ fontSize: "2.2rem", fontWeight: 800 }}>{title}</h1>
+          {summaryHtml && (
+            <div className="znc" style={{ fontSize: "1.25rem", fontWeight: 600 }} dangerouslySetInnerHTML={{ __html: summaryHtml }} />
+          )}
+        </header>
+        <section className="article-body">
+          {isEmpty ? (
+            <div className="article-fallback">No content or unsupported block.</div>
+          ) : (
+            <div className="znc" dangerouslySetInnerHTML={{ __html: html }} />
+          )}
+        </section>
+      </article>
+      {isDesktop ? <Toc items={toc} className="aside-layout" /> : <TocButton items={toc} />}
+    </div>
   );
 }

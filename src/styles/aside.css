@@ -1,0 +1,23 @@
+/* ...existing code... */
+/* TOCカラム・aside専用 */
+.aside-layout {
+  margin: 30px 10px 0 10px;
+  border-radius: 10px;
+  border-left: 2px solid rgba(147, 197, 253, 0.35);
+  background: #ffffff;
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+  min-width: 0;
+}
+
+@media (max-width: 1199px) {
+  .aside-layout {
+    position: static;
+    margin: 0;
+    border-left: none;
+    background: none;
+    border-radius: 0;
+    height: auto;
+  }
+}

@@ -1,3 +1,28 @@
+/* 目次（TOCパネル）用 */
+.toc-panel {
+  padding: 16px 20px;
+}
+.toc-panel p {
+  margin: 0 0 8px;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #334155;
+}
+.toc-panel ul {
+  margin: 0;
+  padding-left: 24px;
+  list-style-type: disc;
+}
+.toc-panel li {
+  margin: 6px 0;
+  color: #64748b;
+}
+.toc-panel a {
+  color: #424a57;
+}
+.toc-panel a:hover {
+  color: var(--accent-main);
+}
 /* TOC（目次）専用 */
 h2[id] {
   scroll-margin-top: 80px;
@@ -8,8 +33,9 @@ h2[id] {
   right: 16px;
   z-index: 11000;
   background: #fff;
-  color: #2563eb;
-  border: 1.5px solid #93c5fd;
+  /* color: #2563eb; */
+  color: --text-muted;
+  border: 1.5px dashed #93c5fd;
   border-radius: 999px;
   font-size: 1.08em;
   font-weight: 700;

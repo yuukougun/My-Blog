@@ -8,7 +8,7 @@ type TocProps = {
   onLinkClick?: () => void;
 };
 
-export default function Toc({ items, mode = "panel", onClose, onLinkClick }: TocProps) {
+export default function Toc({ items, mode = "panel", onClose, onLinkClick, className }: TocProps & { className?: string }) {
   if (items.length === 0) return null;
 
   useEscapeKey(mode === "dialog" && Boolean(onClose), () => {
@@ -41,7 +41,7 @@ export default function Toc({ items, mode = "panel", onClose, onLinkClick }: Toc
 
   // panel（従来通り）
   return (
-    <aside className="toc-panel" aria-label="目次">
+    <aside className={`toc-panel${className ? ` ${className}` : ""}`} aria-label="目次">
       <p>目次</p>
       <ul>
         {items.map((item) => (

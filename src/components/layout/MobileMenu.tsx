@@ -11,17 +11,17 @@ type MobileMenuProps = {
 };
 
 export default function MobileMenu({ isOpen, items, onClose }: MobileMenuProps) {
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
 
+
+
+  // Escapeキーで閉じる
+  useEffect(() => {
+    if (!isOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
-
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isOpen, onClose]);

@@ -13,7 +13,7 @@ export default function ContentCard({ item }: ContentCardProps) {
     <article className="content-card">
       <Link href={item.href} className="content-card-link" aria-label={`${item.title} へ移動`}>
         <div className="content-card-image-wrap">
-          <Image src={item.image} alt={item.title} width={640} height={360} className="content-card-image" />
+          <Image src={item.image} alt={item.title} width={640} height={360} className="content-card-image" loading="eager" priority />
         </div>
         <div className="content-card-body">
           <div className="content-card-meta">

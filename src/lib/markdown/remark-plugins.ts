@@ -16,22 +16,26 @@ function preprocessMessageBlocks(markdown: string): string {
   });
 }
 
+function generateIdFromText(text: string, idx: number): string {
+  let id = text
+    .normalize("NFKC")
+    .replace(/[^\p{L}\p{N}\s-]/gu, "")
+    .replace(/\s+/g, "-")
+    .toLowerCase();
+  if (!id) id = `toc-${idx}`;
+  return id;
+}
+
 function extractToc(markdown: string): TocItem[] {
   const items: TocItem[] = [];
   const lines = markdown.split("\n");
   let idx = 0;
   for (const line of lines) {
-    const match = /^(#{2,4})\s+(.+)$/.exec(line.trim());
+    const match = /^(##)\s+(.+)$/.exec(line.trim());
     if (!match) continue;
-    const level = Math.min(4, Math.max(2, match[1].length)) as 2 | 3 | 4;
+    const level = 2 as 2;
     const text = match[2].trim();
-    // 日本語もidに含める（全角→半角変換、記号除去、スペース→-）
-    let id = text
-      .normalize("NFKC")
-      .replace(/[^\p{L}\p{N}\s-]/gu, "")
-      .replace(/\s+/g, "-")
-      .toLowerCase();
-    if (!id) id = `toc-${idx}`;
+    const id = generateIdFromText(text, idx);
     items.push({ id, text, level });
     idx++;
   }
@@ -41,19 +45,22 @@ function extractToc(markdown: string): TocItem[] {
 // rehypeプラグイン: h2/h3/h4にid属性を付与
 import { visit } from "unist-util-visit";
 import type { Root } from "hast";
-function rehypeAddHeadingIds(toc: TocItem[]) {
-  let idx = 0;
+function rehypeAddHeadingIds() {
+  let h2Count = 0;
   return (tree: Root) => {
     if (!tree) return;
     visit(tree, "element", (node) => {
       if (!node || typeof node !== "object" || !("tagName" in node)) return;
-      if (["h2", "h3", "h4"].includes(node.tagName)) {
-        const tocItem = toc[idx];
-        if (tocItem) {
-          node.properties = node.properties || {};
-          node.properties.id = tocItem.id;
-        }
-        idx++;
+      if (node.tagName === "h2") {
+        // h2のテキストからid生成（type==='text'のvalueを連結）
+        const text = (node.children || [])
+          .filter((c: any) => c.type === "text" && typeof c.value === "string")
+          .map((c: any) => c.value)
+          .join("");
+        const id = generateIdFromText(text, h2Count);
+        node.properties = node.properties || {};
+        node.properties.id = id;
+        h2Count++;
       }
     });
   };
@@ -67,13 +74,14 @@ export async function renderMarkdown(markdown: string): Promise<{ html: string; 
     .use(remarkGfm)
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
-    .use(() => rehypeAddHeadingIds(toc))
+    .use(() => rehypeAddHeadingIds())
     .use(rehypeSanitize, {
       tagNames: [
         "div", "p", "a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "blockquote", "strong", "em", "img", "hr",
-        "table", "thead", "tbody", "tr", "th", "td"
+        "table", "thead", "tbody", "tr", "th", "td", "del"
       ],
       attributes: {
+        h2: ["id"],
         div: ["className"],
         a: ["href", "target", "rel"],
         img: ["src", "alt"],
@@ -81,7 +89,9 @@ export async function renderMarkdown(markdown: string): Promise<{ html: string; 
         table: ["className"],
         th: ["colspan", "rowspan", "scope"],
         td: ["colspan", "rowspan"],
+        del: [],
       },
+      clobberPrefix: "",
     })
     .use(rehypeHighlight)
     .use(rehypeStringify)

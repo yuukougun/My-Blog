@@ -1,0 +1,11 @@
+.znc h2 {
+  margin-top: 1em;
+}
+
+.znc p {
+  line-height: 1.4;
+}
+
+.znc p + p {
+  margin-top: 1em;
+}

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import ArticleLayout from "@/components/article/ArticleLayout";
 import { renderArticleHtml } from "@/lib/markdown/rehype-plugins";
+import { renderMarkdown } from "@/lib/markdown/remark-plugins";
 import { fetchProjectBySlug } from "@/lib/content/notion";
 import { generateStaticProjectParams } from "./generateStaticParams";
 
@@ -22,12 +23,14 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
   const article = await renderArticleHtml(project.bodyMarkdown);
 
+  // summaryもMarkdown→HTML変換
+  const summaryHtml = project.summary ? (await renderMarkdown(project.summary)).html : "";
   return (
     <main className="page-wrap">
       <ArticleLayout
         coverImage={project.coverImage}
         title={project.title}
-        summary={project.summary}
+        summaryHtml={summaryHtml}
         toc={article.toc}
         html={article.html}
       />

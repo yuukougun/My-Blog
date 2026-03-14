@@ -1,6 +1,7 @@
 import { Client } from "@notionhq/client";
 import { mapNotionProject } from "@/lib/content/mapper";
 import { fetchProjectPageMarkdown } from "@/lib/content/notion-md";
+import { saveNotionMarkdown } from "@/lib/content/save-notion-md";
 import { withRetry } from "@/lib/content/retry";
 import type { ProjectItem } from "@/types/content";
 
@@ -104,6 +105,8 @@ async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<Raw
   let bodyMarkdown = "";
   try {
     bodyMarkdown = await fetchProjectPageMarkdown(page.id);
+    // 取得したMarkdownをローカルに保存
+    await saveNotionMarkdown(page.id, bodyMarkdown);
   } catch {
     bodyMarkdown = "";
   }
@@ -117,9 +120,9 @@ async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<Raw
   let summary = undefined;
   let bodyWithoutOverview = bodyMarkdown;
   if (bodyMarkdown) {
-    // 概要見出しとその内容（次の見出しまで）を除去
-    bodyWithoutOverview = bodyMarkdown.replace(/^#{2,4}\s*概要\s*\n+[\s\S]*?(?=^#{2,4}\s|\n*$)/m, "");
-    const overviewMatch = bodyMarkdown.match(/^#{2,4}\s*概要\s*\n+([\s\S]*?)(\n#|$)/m);
+    // 概要見出しとその内容（次の見出しまで）を除去（#~#### 概要対応）
+    bodyWithoutOverview = bodyMarkdown.replace(/^#{1,4}\s*概要\s*\n+[\s\S]*?(?=^#{1,4}\s|\n*$)/m, "");
+    const overviewMatch = bodyMarkdown.match(/^#{1,4}\s*概要\s*\n+([\s\S]*?)(\n#|$)/m);
     if (overviewMatch) {
       summary = overviewMatch[1].split("\n").map(line => line.trim()).filter(Boolean)[0];
     }

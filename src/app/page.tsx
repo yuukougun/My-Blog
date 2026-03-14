@@ -1,10 +1,15 @@
+
+
 import CardGrid from "@/components/cards/CardGrid";
 import { fetchProjects } from "@/lib/content/notion";
+import { fetchDevLogs } from "@/lib/content/devlog-source";
 import { toCardItem } from "@/lib/content/mapper";
 
 export default async function Home() {
   const projects = await fetchProjects();
-  const cards = projects.map((project) => toCardItem(project, "/projects"));
+  const projectCards = projects.map((project) => toCardItem(project, "/projects"));
+  const devLogs = await fetchDevLogs();
+  const devLogCards = devLogs.slice(0, 3).map((item) => toCardItem(item, "/devlog"));
 
   return (
     <main className="page-wrap">
@@ -15,7 +20,12 @@ export default async function Home() {
 
       <section className="section-panel">
         <h2>Projects</h2>
-        <CardGrid items={cards} emptyMessage="Projects are coming soon." />
+        <CardGrid items={projectCards} emptyMessage="Projects are coming soon." />
+      </section>
+
+      <section className="section-panel">
+        <h2>DevLog</h2>
+        <CardGrid items={devLogCards} emptyMessage="DevLogs are coming soon." />
       </section>
     </main>
   );

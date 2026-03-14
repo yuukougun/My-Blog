@@ -1,5 +1,10 @@
+
+
+"use client";
 import Toc from "@/components/article/Toc";
+import TocButton from "@/components/article/TocButton";
 import type { TocItem } from "@/types/article";
+import { useEffect, useState } from "react";
 
 type ArticleLayoutProps = {
   coverImage: string;
@@ -11,6 +16,15 @@ type ArticleLayoutProps = {
 
 export default function ArticleLayout({ coverImage, title, summaryHtml, toc, html }: ArticleLayoutProps) {
   const isEmpty = !html || html.trim() === "" || /^(<p>)?(No content|# Coming soon)(<\/p>)?$/i.test(html.trim());
+  // 1200px以上をデスクトップ扱い
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 1200);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   return (
     <article className="article-layout">
       <img src={coverImage} alt={title} className="article-cover" />
@@ -20,7 +34,7 @@ export default function ArticleLayout({ coverImage, title, summaryHtml, toc, htm
           <div className="znc" style={{ fontSize: "1.25rem", fontWeight: 600 }} dangerouslySetInnerHTML={{ __html: summaryHtml }} />
         )}
       </header>
-      <Toc items={toc} />
+      {isDesktop ? <Toc items={toc} /> : <TocButton items={toc} />}
       <section className="article-body">
         {isEmpty ? (
           <div className="article-fallback">No content or unsupported block.</div>

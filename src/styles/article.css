@@ -1,0 +1,82 @@
+/* 記事レイアウト専用 */
+.article-layout {
+  border: none;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 14px 32px rgba(37, 99, 235, 0.09);
+}
+.article-cover {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-bottom: none;
+}
+.article-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+.article-header h1 {
+  margin: 0;
+}
+.article-header p {
+  margin: 8px 0 0;
+  color: #475569;
+}
+.toc-panel {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(147, 197, 253, 0.35);
+}
+.toc-panel p {
+  margin: 0 0 8px;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #334155;
+}
+.toc-panel ul {
+  margin: 0;
+  padding-left: 24px;
+  list-style-type: disc;
+}
+.toc-panel li {
+  margin: 6px 0;
+  color: #64748b;
+}
+.toc-panel a {
+  color: #424a57;
+}
+.toc-panel a:hover {
+  color: var(--accent-main);
+}
+.article-body {
+  padding: 20px;
+  font-size: 1.2rem;
+  line-height: 1.9;
+}
+.article-body pre {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+@media (min-width: 1200px) {
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+  .article-cover,
+  .article-header,
+  .article-body {
+    grid-column: 1;
+  }
+  .toc-panel {
+    margin: 30px 10px 0 10px;
+    border-radius: 10px;
+    grid-column: 2;
+    grid-row: 1 / 4;
+    border-left: 2px solid rgba(147, 197, 253, 0.35);
+    border-bottom: none;
+    background: #f7fbff;
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+  }
+}

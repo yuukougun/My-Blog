@@ -1,0 +1,21 @@
+/* レイアウト・全体構造 */
+.site-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.site-main {
+  flex: 1;
+}
+.page-wrap {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 82px 22px 40px;
+  display: grid;
+  gap: 22px;
+}
+@media (max-width: 640px) {
+  .page-wrap {
+    padding: 104px 14px 28px;
+  }
+}

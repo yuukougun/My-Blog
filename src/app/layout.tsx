@@ -1,4 +1,6 @@
+
 import type { Metadata } from "next";
+// サイト全体のスタイルはglobals.css経由で一元管理
 import "@/styles/globals.css";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";

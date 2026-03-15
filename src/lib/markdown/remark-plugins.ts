@@ -31,9 +31,10 @@ function extractToc(markdown: string): TocItem[] {
   const lines = markdown.split("\n");
   let idx = 0;
   for (const line of lines) {
-    const match = /^(##)\s+(.+)$/.exec(line.trim());
+    // h2, h3両方抽出
+    const match = /^(###?)\s+(.+)$/.exec(line.trim());
     if (!match) continue;
-    const level = 2 as 2;
+    const level = match[1] === "##" ? 2 : 3;
     const text = match[2].trim();
     const id = generateIdFromText(text, idx);
     items.push({ id, text, level });
@@ -46,21 +47,21 @@ function extractToc(markdown: string): TocItem[] {
 import { visit } from "unist-util-visit";
 import type { Root } from "hast";
 function rehypeAddHeadingIds() {
-  let h2Count = 0;
+  let idx = 0;
   return (tree: Root) => {
     if (!tree) return;
     visit(tree, "element", (node) => {
       if (!node || typeof node !== "object" || !("tagName" in node)) return;
-      if (node.tagName === "h2") {
-        // h2のテキストからid生成（type==='text'のvalueを連結）
+      if (node.tagName === "h2" || node.tagName === "h3") {
+        // h2/h3のテキストからid生成
         const text = (node.children || [])
           .filter((c: any) => c.type === "text" && typeof c.value === "string")
           .map((c: any) => c.value)
           .join("");
-        const id = generateIdFromText(text, h2Count);
+        const id = generateIdFromText(text, idx);
         node.properties = node.properties || {};
         node.properties.id = id;
-        h2Count++;
+        idx++;
       }
     });
   };
@@ -82,6 +83,7 @@ export async function renderMarkdown(markdown: string): Promise<{ html: string; 
       ],
       attributes: {
         h2: ["id"],
+        h3: ["id"],
         div: ["className"],
         a: ["href", "target", "rel"],
         img: ["src", "alt"],

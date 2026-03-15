@@ -8,12 +8,51 @@ type TocProps = {
   onLinkClick?: () => void;
 };
 
-export default function Toc({ items, mode = "panel", onClose, onLinkClick, className }: TocProps & { className?: string }) {
+
+// 階層化: h2ごとにh3を子ulでネスト
+function nestToc(items: TocItem[]) {
+  const nested: any[] = [];
+  let currentH2: any = null;
+  for (const item of items) {
+    if (item.level === 2) {
+      currentH2 = { ...item, children: [] };
+      nested.push(currentH2);
+    } else if (item.level === 3 && currentH2) {
+      currentH2.children.push(item);
+    }
+  }
+  return nested;
+}
+
+function TocList({ toc, onLinkClick, activeId }: { toc: ReturnType<typeof nestToc>, onLinkClick?: () => void, activeId?: string | null }) {
+  return (
+    <ul>
+      {toc.map((item) => (
+        <li key={item.id} className={`toc-level-2${activeId === item.id ? " active" : ""}`}>
+          <a href={`#${item.id}`} onClick={onLinkClick}>{item.text}</a>
+          {item.children && item.children.length > 0 && (
+            <ul>
+              {item.children.map((child: TocItem) => (
+                <li key={child.id} className={`toc-level-3${activeId === child.id ? " active" : ""}`}>
+                  <a href={`#${child.id}`} onClick={onLinkClick}>{child.text}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export default function Toc({ items, mode = "panel", onClose, onLinkClick, className, activeId }: TocProps & { className?: string, activeId?: string | null }) {
   if (items.length === 0) return null;
 
   useEscapeKey(mode === "dialog" && Boolean(onClose), () => {
     onClose?.();
   });
+
+  const nested = nestToc(items);
 
   if (mode === "dialog") {
     return (
@@ -22,18 +61,7 @@ export default function Toc({ items, mode = "panel", onClose, onLinkClick, class
         <aside className="toc-panel toc-dialog-panel">
           <button className="toc-dialog-close" aria-label="目次を閉じる" onClick={onClose}>&times;</button>
           <p>目次</p>
-          <ul>
-            {items.map((item) => (
-              <li key={item.id} className={`toc-level-${item.level}`}>
-                <a
-                  href={`#${item.id}`}
-                  onClick={onLinkClick}
-                >
-                  {item.text}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <TocList toc={nested} onLinkClick={onLinkClick} activeId={activeId} />
         </aside>
       </div>
     );
@@ -43,13 +71,7 @@ export default function Toc({ items, mode = "panel", onClose, onLinkClick, class
   return (
     <aside className={`toc-panel${className ? ` ${className}` : ""}`} aria-label="目次">
       <p>目次</p>
-      <ul>
-        {items.map((item) => (
-          <li key={item.id} className={`toc-level-${item.level}`}>
-            <a href={`#${item.id}`}>{item.text}</a>
-          </li>
-        ))}
-      </ul>
+      <TocList toc={nested} onLinkClick={onLinkClick} activeId={activeId} />
     </aside>
   );
 }

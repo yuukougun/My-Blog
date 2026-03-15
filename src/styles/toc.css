@@ -10,21 +10,83 @@
 }
 .toc-panel ul {
   margin: 0;
-  padding-left: 24px;
-  list-style-type: disc;
+  display: block;
+  position: relative;
+  list-type: none;
+}
+.toc-panel > ul::before {
+  position: absolute;
+  top: 17px;
+  bottom: 8px;
+  left: 5px;
+  width: 2px;
+  content: "";
+  background: #e0efff;
+  border-radius: 0 0 5px 5px;
+  box-sizing: inherit;
 }
 .toc-panel li {
-  margin: 6px 0;
+  padding-left: 24px;
   color: #64748b;
+  position: relative;
+}
+.toc-panel li::before {
+  background: #bfdcff;
+  border-color: #ffffff;
+  position: absolute;
+  content: "";
+  border-radius: 50%;
+  top: 4px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border: 2px solid  #ffffff;
+  box-sizing: inherit;
+}
+.toc-panel .toc-level-2 {
+  margin-top: 5px;
+}
+.toc-panel .toc-level-2.active::before {
+  background: #3ea8ff;
+  border-color: #e0efff;
+}
+.toc-panel .toc-level-3 {
+  padding-left: 0;
+}
+.toc-panel .toc-level-3::before {
+  top: 6px;
+  left: -22px;
+  width: 8px;
+  height: 8px;
+  background: #cfe5ff;
+}
+.toc-panel .toc-level-3.active::before {
+  left: -24;
+  width: 12px;
+  height: 12px;
+  background: #3ea8ff;
+  border: 2px solid  #ffffff;
 }
 .toc-panel a {
+  display: flex;
+  font-size: 1.2em;
+  font-weight: bold;
   color: #424a57;
+  margin: 8px 0;
+}
+.toc-panel li.active > a{
+  font-weight: bold;
+  color: #000000;
+}
+.toc-panel .toc-level-3 a{
+  color: #65717b;
+  font-weight: normal;
 }
 .toc-panel a:hover {
-  color: var(--accent-main);
+  color: #000000;
 }
 /* TOC（目次）専用 */
-h2[id] {
+h2[id], h3[id] {
   scroll-margin-top: 80px;
 }
 .toc-fab {

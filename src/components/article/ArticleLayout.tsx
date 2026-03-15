@@ -18,12 +18,40 @@ export default function ArticleLayout({ coverImage, title, summaryHtml, toc, htm
   const isEmpty = !html || html.trim() === "" || /^(<p>)?(No content|# Coming soon)(<\/p>)?$/i.test(html.trim());
   // 1200px以上をデスクトップ扱い
   const [isDesktop, setIsDesktop] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1200);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
+
+  // スクロールで現在の見出しid（h2/h3両方）を検出
+  useEffect(() => {
+    if (!toc || toc.length === 0) return;
+    const headingIds = toc.map((item) => item.id);
+    const onScroll = () => {
+      let minDiff = Number.POSITIVE_INFINITY;
+      let currentId = headingIds[0];
+      for (const id of headingIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rectTop = el.getBoundingClientRect().top;
+          // 120pxはヘッダー等の高さ分オフセット
+          const diff = Math.abs(rectTop - 120);
+          if (rectTop - 120 <= 0 && diff < minDiff) {
+            minDiff = diff;
+            currentId = id;
+          }
+        }
+      }
+      setActiveId(currentId);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [toc]);
 
   return (
     <div className="page-2col">
@@ -43,7 +71,7 @@ export default function ArticleLayout({ coverImage, title, summaryHtml, toc, htm
           )}
         </section>
       </article>
-      {isDesktop ? <Toc items={toc} className="aside-layout" /> : <TocButton items={toc} />}
+      {isDesktop ? <Toc items={toc} className="aside-layout" activeId={activeId} /> : <TocButton items={toc} />}
     </div>
   );
 }

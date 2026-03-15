@@ -65,7 +65,7 @@ export function mapDevLog(input: {
   };
 }
 
-export function toCardItem(input: Pick<ProjectItem | DevLogItem, "id" | "title" | "summary" | "coverImage" | "publishedAt" | "slug">, basePath: "/projects" | "/devlog"): CardItem {
+export function toCardItem(input: Pick<ProjectItem | DevLogItem, "id" | "title" | "summary" | "coverImage" | "publishedAt" | "slug" | "tags">, basePath: "/projects" | "/devlog"): CardItem {
   // 日付をYYYY-MM-DD形式で整形
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "";
@@ -80,5 +80,6 @@ export function toCardItem(input: Pick<ProjectItem | DevLogItem, "id" | "title" 
     image: input.coverImage,
     publishedAt: formatDate(input.publishedAt),
     href: `${basePath}/${input.slug}`,
+    tags: input.tags,
   };
 }

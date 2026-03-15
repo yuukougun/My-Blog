@@ -30,4 +30,5 @@ export type CardItem = {
   href: string;
   image: string;
   publishedAt: string;
+  tags?: string[];
 };

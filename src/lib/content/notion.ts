@@ -3,6 +3,7 @@ import { mapNotionProject } from "@/lib/content/mapper";
 import { fetchProjectPageMarkdown } from "@/lib/content/notion-md";
 import { saveNotionMarkdown } from "@/lib/content/save-notion-md";
 import { withRetry } from "@/lib/content/retry";
+import { extractOverviewSection } from "./extractOverviewSection";
 import type { ProjectItem } from "@/types/content";
 
 const REQUIRED_NOTION_ENV = ["NOTION_TOKEN", "NOTION_PROJECTS_DATABASE_ID"] as const;
@@ -116,24 +117,66 @@ async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<Raw
   if (publishedAtProp && typeof publishedAtProp === "object" && "created_time" in publishedAtProp) {
     publishedAt = (publishedAtProp as { created_time: string }).created_time;
   }
-  // summary: 本文の「## 概要」または「### 概要」見出し直下のテキストを抽出し、概要見出しとその内容をMarkdownから除去
+  // summary: Markdownをパースして「概要」見出し直下から次の見出しまでを抽出
   let summary = undefined;
   let bodyWithoutOverview = bodyMarkdown;
   if (bodyMarkdown) {
-    // 概要見出しとその内容（次の見出しまで）を除去（#~#### 概要対応）
-    bodyWithoutOverview = bodyMarkdown.replace(/^#{1,4}\s*概要\s*\n+[\s\S]*?(?=^#{1,4}\s|\n*$)/m, "");
-    const overviewMatch = bodyMarkdown.match(/^#{1,4}\s*概要\s*\n+([\s\S]*?)(\n#|$)/m);
-    if (overviewMatch) {
-      summary = overviewMatch[1].split("\n").map(line => line.trim()).filter(Boolean)[0];
-    }
-    if (!summary) {
+    summary = extractOverviewSection(bodyMarkdown);
+    if (summary) {
+      // ASTで概要部分を除去
+      const unified = (await import("unified")).unified;
+      const remarkParse = (await import("remark-parse")).default;
+      const remarkStringify = (await import("remark-stringify")).default;
+      const tree = unified().use(remarkParse).parse(bodyMarkdown);
+      // 概要見出しのインデックスを特定
+      const children = tree.children;
+      let overviewIdx = -1;
+      for (let i = 0; i < children.length; i++) {
+        const node = children[i];
+        if (
+          node.type === "heading" &&
+          node.depth >= 1 && node.depth <= 4 &&
+          node.children &&
+          node.children.length > 0 &&
+          node.children[0].type === "text" &&
+          (node.children[0].value === "概要" || node.children[0].value.toLowerCase() === "overview")
+        ) {
+          overviewIdx = i;
+          break;
+        }
+      }
+      let nextHeadingIdx = -1;
+      if (overviewIdx !== -1) {
+        for (let i = overviewIdx + 1; i < children.length; i++) {
+          const node = children[i];
+          if (node.type === "heading" && node.depth >= 1 && node.depth <= 4) {
+            nextHeadingIdx = i;
+            break;
+          }
+        }
+      }
+      let newChildren;
+      if (overviewIdx !== -1) {
+        if (nextHeadingIdx !== -1) {
+          newChildren = [
+            ...children.slice(0, overviewIdx),
+            ...children.slice(nextHeadingIdx)
+          ];
+        } else {
+          newChildren = children.slice(0, overviewIdx);
+        }
+      } else {
+        newChildren = children;
+      }
+      tree.children = newChildren;
+      bodyWithoutOverview = unified().use(remarkStringify).stringify(tree).trim();
+    } else {
       // fallback: 最初の段落
       const match = bodyMarkdown.match(/^(.*?)(\n|$)/);
       summary = match ? match[1].replace(/^#+\s*/, "").trim() : undefined;
+      bodyWithoutOverview = bodyMarkdown;
     }
   }
-  // bodyMarkdownを概要除去後のものに差し替え
-  bodyMarkdown = bodyWithoutOverview;
   // title: pageカラム（Notionのタイトル列）
   let title = getTextFromTitleProperty(properties.page);
   if (!title) title = "Untitled";
@@ -145,7 +188,7 @@ async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<Raw
     coverImage: page.cover?.external?.url ?? page.cover?.file?.url,
     publishedAt,
     tags: getMultiSelectNames(properties.tags),
-    bodyMarkdown,
+    bodyMarkdown: bodyWithoutOverview,
     repositoryUrl: undefined,
     demoUrl: undefined,
   };

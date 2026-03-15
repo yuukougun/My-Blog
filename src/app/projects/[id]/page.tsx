@@ -27,30 +27,14 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const summaryHtml = project.summary ? (await renderMarkdown(project.summary)).html : "";
   return (
     <main className="page-wrap">
-      <div style={{ marginBottom: 16 }}>
-        {project.tags && project.tags.length > 0 && (
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {project.tags.map((tag) => {
-              const key = tag.toLowerCase();
-              const iconUrl = deviconMap[key];
-              return (
-                <span key={tag} style={{ background: "#e0e7ef", color: "#3b4252", borderRadius: 6, padding: "2px 12px", fontSize: 13, display: "flex", alignItems: "center" }}>
-                  {iconUrl && (
-                    <img src={iconUrl} alt={tag} width={16} height={16} style={{ marginRight: 4, verticalAlign: "middle" }} />
-                  )}
-                  {tag}
-                </span>
-              );
-            })}
-          </div>
-        )}
-      </div>
       <ArticleLayout
         coverImage={project.coverImage}
         title={project.title}
         summaryHtml={summaryHtml}
         toc={article.toc}
         html={article.html}
+        publishedAt={project.publishedAt}
+        tags={project.tags}
       />
     </main>
   );

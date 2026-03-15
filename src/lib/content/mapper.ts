@@ -73,10 +73,15 @@ export function toCardItem(input: Pick<ProjectItem | DevLogItem, "id" | "title" 
     if (isNaN(d.getTime())) return dateStr;
     return d.toISOString().slice(0, 10);
   };
+  // summaryが複数行や空の場合は1行目だけ抽出
+  let summaryLine = input.summary;
+  if (typeof summaryLine === "string") {
+    summaryLine = summaryLine.split("\n")[0].replace(/^#+\s*/, "").trim();
+  }
   return {
     id: input.id,
     title: input.title,
-    summary: input.summary,
+    summary: summaryLine,
     image: input.coverImage,
     publishedAt: formatDate(input.publishedAt),
     href: `${basePath}/${input.slug}`,

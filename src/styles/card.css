@@ -1,3 +1,16 @@
+/* カードの概要を3行で省略表示 */
+.content-card-summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  color: #64748b;
+  font-size: 0.96rem;
+  line-height: 1.65;
+  margin: 0;
+}
 /* カードUI専用 */
 .card-grid {
   display: grid;
@@ -48,17 +61,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-}
-.content-card-kind {
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #1d4ed8;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 999px;
-  padding: 3px 8px;
 }
 .content-card-date {
   margin: 0;

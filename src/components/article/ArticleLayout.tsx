@@ -62,12 +62,12 @@ export default function ArticleLayout({ coverImage, title, summaryHtml, toc, htm
           {(tags && tags.length > 0) || publishedAt ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               {tags && tags.length > 0 && (
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <div className="article-tags">
                   {tags.map((tag) => {
                     const key = tag.toLowerCase();
                     const iconUrl = deviconMap[key];
                     return (
-                      <span key={tag} style={{ background: "#e0e7ef", color: "#3b4252", borderRadius: 6, padding: "2px 10px", fontSize: 12, display: "flex", alignItems: "center" }}>
+                      <span key={tag} className="article-tag">
                         {iconUrl && (
                           <img src={iconUrl} alt={tag} width={16} height={16} style={{ marginRight: 4, verticalAlign: "middle" }} />
                         )}

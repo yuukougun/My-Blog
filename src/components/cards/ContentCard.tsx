@@ -53,12 +53,12 @@ export default function ContentCard({ item }: ContentCardProps) {
             />
           )}
           {item.tags && item.tags.length > 0 && (
-            <div className="content-card-tags" style={{ marginTop: 8, display: "flex", gap: 6 }}>
+            <div className="content-card-tags">
               {item.tags.map((tag) => {
                 const key = tag.toLowerCase();
                 const iconUrl = deviconMap[key];
                 return (
-                  <span key={tag} className="content-card-tag" style={{ background: "#e0e7ef", color: "#3b4252", borderRadius: 6, padding: "2px 10px", fontSize: 12, display: "flex", alignItems: "center" }}>
+                  <span key={tag} className="content-card-tag">
                     {iconUrl && (
                       <img src={iconUrl} alt={tag} width={16} height={16} style={{ marginRight: 4, verticalAlign: "middle" }} />
                     )}

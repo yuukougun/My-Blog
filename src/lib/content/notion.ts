@@ -4,6 +4,7 @@ import { fetchProjectPageMarkdown } from "@/lib/content/notion-md";
 import { saveNotionMarkdown } from "@/lib/content/save-notion-md";
 import { withRetry } from "@/lib/content/retry";
 import { extractOverviewSection } from "./extractOverviewSection";
+import { generateProjectTopImage } from "@/lib/content/generateProjectTopImage";
 import type { ProjectItem } from "@/types/content";
 
 const REQUIRED_NOTION_ENV = ["NOTION_TOKEN", "NOTION_PROJECTS_DATABASE_ID"] as const;
@@ -180,12 +181,20 @@ async function normalizeRawPageWithMarkdown(page: NotionPageResult): Promise<Raw
   // title: pageカラム（Notionのタイトル列）
   let title = getTextFromTitleProperty(properties.page);
   if (!title) title = "Untitled";
+  const slug = getTextFromRichTextProperty(properties.slug) || page.id;
+  // 画像はprojectフォルダに保存、seedはslug
+  const imagePath = `public/image/project/${slug}.png`;
+  try {
+    await generateProjectTopImage(title, imagePath, { seed: slug });
+  } catch (e) {
+    // 画像生成失敗時は何もしない
+  }
   return {
     id: page.id,
-    slug: getTextFromRichTextProperty(properties.slug),
+    slug,
     title,
     summary,
-    coverImage: page.cover?.external?.url ?? page.cover?.file?.url,
+    coverImage: `/image/project/${slug}.png`,
     publishedAt,
     tags: getMultiSelectNames(properties.tags),
     bodyMarkdown: bodyWithoutOverview,

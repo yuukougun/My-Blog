@@ -50,6 +50,7 @@ export function mapDevLog(input: {
   bodyMarkdown?: string;
   source: "zenn" | "markdown";
   status?: "idea" | "in-progress" | "done";
+  scrapLink?: string;
 }): DevLogItem {
   return {
     id: input.id,
@@ -62,6 +63,7 @@ export function mapDevLog(input: {
     source: input.source,
     status: input.status,
     bodyMarkdown: ensureString(input.bodyMarkdown, "# Coming soon"),
+    scrapLink: input.scrapLink,
   };
 }
 

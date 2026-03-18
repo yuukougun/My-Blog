@@ -22,8 +22,12 @@ export async function fetchDevLogsFromZenn(): Promise<DevLogItem[]> {
 
   const items = (await response.json()) as ZennFeedItem[];
 
-  return items.map((item) =>
-    mapDevLog({
+  return items.map((item) => {
+    const scrapLink = item.link;
+    if (scrapLink) {
+      console.log(`[DevLog:Zenn] scrapLink for ${item.id}:`, scrapLink);
+    }
+    return mapDevLog({
       id: item.id,
       slug: item.id,
       title: item.title,
@@ -32,8 +36,9 @@ export async function fetchDevLogsFromZenn(): Promise<DevLogItem[]> {
       publishedAt: item.publishedAt,
       bodyMarkdown: item.summary ?? "",
       source: "zenn",
-    }),
-  );
+      scrapLink,
+    });
+  });
 }
 
 export async function fetchDevLogBySlugFromZenn(slug: string): Promise<DevLogItem | null> {

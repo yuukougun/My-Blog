@@ -1,3 +1,76 @@
+// summary用: 段落ごとに最後以外の行末に<br>を付与し、Markdown→HTML変換
+export async function renderSummaryMarkdown(markdown: string): Promise<string> {
+  // 段落ごとに最後以外の行末に<br>を付与
+  let preprocessed = preprocessMessageBlocks(addBrToParagraphs(markdown));
+  const result = await unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRaw)
+    .use(rehypeBrInParagraphs)
+    .use(rehypeSanitize, {
+      tagNames: [
+        "div", "p", "a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "blockquote", "strong", "em", "img", "hr",
+        "table", "thead", "tbody", "tr", "th", "td", "del", "br"
+      ],
+      attributes: {
+        h2: ["id"],
+        h3: ["id"],
+        div: ["className"],
+        a: ["href", "target", "rel"],
+        img: ["src", "alt"],
+        code: ["className"],
+        table: ["className"],
+        th: ["colspan", "rowspan", "scope"],
+        td: ["colspan", "rowspan"],
+        del: [],
+      },
+      clobberPrefix: "",
+    })
+    .use(rehypeHighlight)
+    .use(rehypeStringify)
+    .process(preprocessed);
+  return String(result);
+}
+// 段落ごとに最後以外の行末に<br>を付与する関数
+function addBrToParagraphs(markdown: string): string {
+  return markdown
+    .split(/\n\s*\n/)
+    .map(paragraph => {
+      const lines = paragraph.split('\n');
+      // 全行がブロック要素なら除外
+      const isBlock = lines.every(line =>
+        /^\s*(\||- |\* |\d+\. |> |# )/.test(line)
+      );
+      if (isBlock) return paragraph;
+      return lines.map((line, idx) =>
+        idx < lines.length - 1 ? line + '<br>' : line
+      ).join('\n');
+    })
+    .join('\n\n');
+}
+// pタグ内のテキストノードに含まれる<br>をbrノードに変換するrehypeプラグイン
+function rehypeBrInParagraphs() {
+  return (tree: Root) => {
+    visit(tree, "element", (node: any) => {
+      if (node.tagName === "p" && Array.isArray(node.children)) {
+        let newChildren: any[] = [];
+        node.children.forEach((child: any) => {
+          if (child.type === "text" && typeof child.value === "string" && child.value.includes("<br>")) {
+            const parts: string[] = child.value.split("<br>");
+            parts.forEach((part: string, idx: number) => {
+              if (part) newChildren.push({ type: "text", value: part });
+              if (idx < parts.length - 1) newChildren.push({ type: "element", tagName: "br", properties: {}, children: [] });
+            });
+          } else {
+            newChildren.push(child);
+          }
+        });
+        node.children = newChildren;
+      }
+    });
+  };
+}
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
@@ -67,7 +140,8 @@ function rehypeAddHeadingIds() {
   };
 }
 export async function renderMarkdown(markdown: string): Promise<{ html: string; toc: TocItem[] }> {
-  const preprocessed = preprocessMessageBlocks(markdown);
+  // 段落ごとに最後以外の行末に<br>を付与
+  let preprocessed = preprocessMessageBlocks(addBrToParagraphs(markdown));
   const toc = extractToc(preprocessed);
 
   const result = await unified()
@@ -76,10 +150,11 @@ export async function renderMarkdown(markdown: string): Promise<{ html: string; 
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
     .use(() => rehypeAddHeadingIds())
+    .use(rehypeBrInParagraphs) // 追加: pタグ内の<br>をbrノードに変換
     .use(rehypeSanitize, {
       tagNames: [
         "div", "p", "a", "code", "pre", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "blockquote", "strong", "em", "img", "hr",
-        "table", "thead", "tbody", "tr", "th", "td", "del"
+        "table", "thead", "tbody", "tr", "th", "td", "del", "br"
       ],
       attributes: {
         h2: ["id"],

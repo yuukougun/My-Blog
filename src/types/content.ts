@@ -21,6 +21,7 @@ export type DevLogItem = ContentBase & {
   source: "zenn" | "markdown";
   bodyMarkdown: string;
   status?: "idea" | "in-progress" | "done";
+  scrapLink?: string;
 };
 
 export type CardItem = {

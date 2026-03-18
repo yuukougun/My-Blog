@@ -91,8 +91,8 @@ export default function ArticleLayout({ coverImage, title, summaryHtml, toc, htm
           {summaryHtml && (
             <div
               className="znc"
-              style={{ fontSize: "1.25rem", fontWeight: 600, whiteSpace: "pre-line" }}
-              dangerouslySetInnerHTML={{ __html: summaryHtml.replace(/\n/g, '<br />') }}
+              style={{ fontSize: "1.25rem", fontWeight: 600 }}
+              dangerouslySetInnerHTML={{ __html: summaryHtml }}
             />
           )}
         </header>

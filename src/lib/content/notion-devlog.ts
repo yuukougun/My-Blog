@@ -3,6 +3,7 @@ import { mapDevLog } from "@/lib/content/mapper";
 import { fetchProjectPageMarkdown } from "@/lib/content/notion-md";
 import { saveNotionMarkdown } from "@/lib/content/save-notion-md";
 import { extractOverviewSection } from "@/lib/content/extractOverviewSection";
+import { generateDevLogTopImage } from "@/lib/content/generateDevLogTopImage";
 import type { DevLogItem } from "@/types/content";
 
 const REQUIRED_NOTION_ENV = ["NOTION_TOKEN", "NOTION_DEVLOG_DATABASE_ID"] as const;
@@ -126,7 +127,15 @@ export async function fetchDevLogsFromNotion(): Promise<DevLogItem[]> {
       tree.children = newChildren;
       bodyWithoutOverview = unified().use(remarkStringify).stringify(tree).trim();
     }
-    const coverImage = undefined;
+    // 画像生成: slugをseedにしてpublic/image/devlog/slug.pngに保存
+    let coverImage = undefined;
+    try {
+      const imagePath = `public/image/devlog/${slug}.png`;
+      await generateDevLogTopImage(title, imagePath, { seed: slug });
+      coverImage = `/image/devlog/${slug}.png`;
+    } catch (e) {
+      // 画像生成失敗時はundefinedのまま
+    }
     const publishedAt = properties.publishedAt?.created_time || "";
     const tags = getMultiSelectNames(properties.tags);
     // scrap-linkプロパティの型を問わず値を取得

@@ -2,6 +2,9 @@
 // どのコンポーネント/ページからもimportして使える共通モジュール
 
 export const deviconMap: Record<string, string> = {
+  ai: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ai/ai-original.svg", // 仮: AI用アイコン（必要に応じて差し替え）
+  css: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+  html: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
   python: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
   'c++': "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
   rust: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-plain.svg",

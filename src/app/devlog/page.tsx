@@ -4,6 +4,11 @@ import { fetchDevLogs } from "@/lib/content/devlog-source";
 
 export default async function DevLogPage() {
   const devLogs = await fetchDevLogs();
+  devLogs.forEach((item) => {
+    // デバッグ: tagsの値を出力
+    // eslint-disable-next-line no-console
+    console.log("DevLog", item.title, item.tags);
+  });
   const cards = devLogs.map((item) => toCardItem(item, "/devlog"));
 
   return (

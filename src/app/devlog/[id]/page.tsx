@@ -46,10 +46,11 @@ export default async function DevLogDetailPage({ params }: DevLogDetailPageProps
         coverImage={entry.coverImage}
         title={entry.title}
         summaryHtml={summaryHtml}
-        toc={article.toc}
+        toc={[]}
         html={article.html}
         publishedAt={entry.publishedAt}
         tags={entry.tags}
+        hideToc={true}
       />
       {scrapSections.length > 0 && (
         <section className="section-panel">

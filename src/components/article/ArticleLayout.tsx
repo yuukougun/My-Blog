@@ -13,9 +13,10 @@ type ArticleLayoutProps = {
   html: string;
   publishedAt?: string;
   tags?: string[];
+  hideToc?: boolean; // 追加: 目次自体を消すフラグ
 };
 
-export default function ArticleLayout({ coverImage, title, summaryHtml, toc, html, publishedAt, tags }: ArticleLayoutProps) {
+export default function ArticleLayout({ coverImage, title, summaryHtml, toc, html, publishedAt, tags, hideToc }: ArticleLayoutProps) {
   const isEmpty = !html || html.trim() === "" || /^(<p>)?(No content|# Coming soon)(<\/p>)?$/i.test(html.trim());
   // 1200px以上をデスクトップ扱い
   const [isDesktop, setIsDesktop] = useState(false);
@@ -57,8 +58,10 @@ export default function ArticleLayout({ coverImage, title, summaryHtml, toc, htm
   // DevLog紹介ページかどうかはpropsで明示的に判定
   const isDevLogIntro = tags === undefined && publishedAt === undefined;
 
+  // hideTocがtrueなら1カラム（devlog-intro）、falseなら2カラム
+  const layoutClass = hideToc ? "page-2col devlog-intro" : "page-2col";
   return (
-    <div className={isDevLogIntro ? "page-2col devlog-intro" : "page-2col"}>
+    <div className={layoutClass}>
       <article className="article-layout">
         <img src={coverImage} alt={title} className="article-cover" />
         <header className="article-header">
@@ -108,7 +111,7 @@ export default function ArticleLayout({ coverImage, title, summaryHtml, toc, htm
         </section>
       </article>
       {/* Project詳細ページでは目次を表示、DevLog紹介ページでは非表示 */}
-      {!isDevLogIntro && (isDesktop ? <Toc items={toc} className="aside-layout" activeId={activeId} /> : <TocButton items={toc} />)}
+      {!hideToc && (isDesktop ? <Toc items={toc} className="aside-layout" activeId={activeId} /> : <TocButton items={toc} />)}
     </div>
   );
 }

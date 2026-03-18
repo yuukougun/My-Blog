@@ -30,12 +30,16 @@
   display: block;
 }
 
+/* Project詳細ページでは最大画面で2カラム、DevLog紹介ページでは1カラム */
 @media (min-width: 1200px) {
-  .page-2col {
+  .page-2col:not(.devlog-intro) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 280px;
     gap: 0 24px;
     align-items: flex-start;
+  }
+  .page-2col.devlog-intro {
+    display: block;
   }
 }
 .article-cover {

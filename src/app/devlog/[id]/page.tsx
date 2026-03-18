@@ -41,7 +41,7 @@ export default async function DevLogDetailPage({ params }: DevLogDetailPageProps
   }
 
   return (
-    <main className="page-wrap">
+    <main className="page-wrap devlog-detail-flex">
       <ArticleLayout
         coverImage={entry.coverImage}
         title={entry.title}

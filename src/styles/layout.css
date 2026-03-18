@@ -9,8 +9,8 @@
 }
 .page-wrap {
   margin: 0 auto;
-  max-width: 1180px;
-  padding: 82px 22px 40px;
+  max-width: 1600px;
+  padding: 82px 60px 60px;
   display: grid;
   gap: 22px;
 }

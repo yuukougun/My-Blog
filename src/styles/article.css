@@ -1,3 +1,25 @@
+/* DevLog作品紹介ページ: main.page-wrap直下の.article-layoutと.section-panelを横並び */
+@media (min-width: 1200px) {
+  .devlog-detail-flex {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+  }
+  .devlog-detail-flex > .devlog-intro {
+    /* flex: 2 1 0; */
+    flex: 1;
+    /* min-width: 0; */
+    max-width: 800;
+  }
+  .devlog-detail-flex > .section-panel {
+    /* flex: 1 1 320px; */
+    flex: 1;
+
+    /* min-width: 0; */
+    /* max-width: 420px; */
+    max-width: 800;
+  }
+}
 /* タグ部分の折り返し対応（記事用） */
 .article-tags {
   display: flex;

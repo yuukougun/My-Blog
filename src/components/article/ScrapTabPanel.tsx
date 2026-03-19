@@ -25,25 +25,13 @@ export function ScrapTabPanel({ sections, title, tab, setTab }: Props) {
 
 export function ScrapTabSelector({ tab, setTab }: { tab: number; setTab: (n: number) => void }) {
   return (
-    <div style={{ display: 'flex', gap: 0, marginBottom: 0 }}>
+    <div className="scrap-tab-selector" style={{ display: 'flex', gap: 0, marginBottom: 0 }}>
       {TAB_LABELS.map((label, idx) => (
         <button
           key={label}
           type="button"
+          className={`scrap-tab-btn${tab === idx ? ' active' : ''}`}
           onClick={() => setTab(idx)}
-          style={{
-            padding: '6px 18px',
-            borderBottom: tab === idx ? '2px solid #2563eb' : 'none',
-            borderTop: 'none',
-            background: '#ffffff',
-            borderRadius: '12px 12px 0 0',
-            fontWeight: tab === idx ? 700 : 500,
-            color: tab === idx ? '#2563eb' : '#334155',
-            cursor: 'pointer',
-            outline: 'none',
-            fontSize: '1rem',
-            transition: 'all 0.15s',
-          }}
         >
           {label}
         </button>

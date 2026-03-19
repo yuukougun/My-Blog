@@ -1,3 +1,26 @@
+/* ScrapタブUI用 */
+.scrap-tab-selector {
+  user-select: none;
+}
+.scrap-tab-btn {
+  background: #fff;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #334155;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 6px 18px;
+  cursor: pointer;
+  transition: color 0.15s, border-bottom 0.15s;
+}
+.scrap-tab-btn:hover {
+  color: #2563eb;
+}
+.scrap-tab-btn.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+  font-weight: 700;
+}
 /* DevLog作品紹介ページ: main.page-wrap直下の.article-layoutと.scrap-tab-panel-wrapを横並び */
 @media (min-width: 1200px) {
   .devlog-detail-flex {

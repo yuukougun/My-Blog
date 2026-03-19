@@ -1,0 +1,53 @@
+"use client";
+import React, { useState } from "react";
+import type { ScrapSection } from "@/lib/content/scrap-extract";
+import { ScrapThread } from "@/components/article/ScrapThread";
+import { redirect } from "next/dist/server/api-utils";
+
+const TAB_LABELS = ["要件", "やること", "その他"];
+
+type Props = { sections: ScrapSection[]; title: string; tab: number; setTab: (n: number) => void };
+export function ScrapTabPanel({ sections, title, tab, setTab }: Props) {
+  let displaySections: ScrapSection[] = [];
+  if (tab === 0 && sections[0]) {
+    displaySections = [sections[0]];
+  } else if (tab === 1 && sections[1]) {
+    displaySections = [sections[1]];
+  } else if (tab === 2 && sections.length > 2) {
+    displaySections = sections.slice(2);
+  }
+  return (
+    <>
+      <ScrapThread displaySections={displaySections} />
+    </>
+  );
+}
+
+export function ScrapTabSelector({ tab, setTab }: { tab: number; setTab: (n: number) => void }) {
+  return (
+    <div style={{ display: 'flex', gap: 0, marginBottom: 0 }}>
+      {TAB_LABELS.map((label, idx) => (
+        <button
+          key={label}
+          type="button"
+          onClick={() => setTab(idx)}
+          style={{
+            padding: '6px 18px',
+            borderBottom: tab === idx ? '2px solid #2563eb' : 'none',
+            borderTop: 'none',
+            background: '#ffffff',
+            borderRadius: '12px 12px 0 0',
+            fontWeight: tab === idx ? 700 : 500,
+            color: tab === idx ? '#2563eb' : '#334155',
+            cursor: 'pointer',
+            outline: 'none',
+            fontSize: '1rem',
+            transition: 'all 0.15s',
+          }}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}

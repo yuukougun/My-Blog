@@ -4,6 +4,7 @@ import { fetchDevLogBySlug } from "@/lib/content/devlog-source";
 import { renderMarkdown } from "@/lib/markdown/remark-plugins";
 import { generateStaticDevLogParams } from "./generateStaticParams";
 import { ScrapThread } from "@/components/article/ScrapThread";
+import ScrapTabPanelWrapper from "@/components/article/ScrapTabPanelWrapper";
 import { extractScrapSections } from "@/lib/content/scrap-extract";
 import type { ScrapSection } from "@/lib/content/scrap-extract";
 
@@ -53,10 +54,7 @@ export default async function DevLogDetailPage({ params }: DevLogDetailPageProps
         hideToc={true}
       />
       {scrapSections.length > 0 && (
-        <section className="section-panel">
-          <h2>Zenn Scrap</h2>
-          <ScrapThread sections={scrapSections} />
-        </section>
+        <ScrapTabPanelWrapper sections={scrapSections} />
       )}
     </main>
   );

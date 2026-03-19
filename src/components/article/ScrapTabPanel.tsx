@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import type { ScrapSection } from "@/lib/content/scrap-extract";
-import { ScrapThread } from "@/components/article/ScrapThread";
+import { ScrapThreadAccordion, ScrapThreadList } from "@/components/article/ScrapThread";
 import { redirect } from "next/dist/server/api-utils";
 
-const TAB_LABELS = ["要件", "やること", "その他"];
+const TAB_LABELS = ["要件", "やること", "Log"];
 
 type Props = { sections: ScrapSection[]; title: string; tab: number; setTab: (n: number) => void };
+
 export function ScrapTabPanel({ sections, title, tab, setTab }: Props) {
   let displaySections: ScrapSection[] = [];
   if (tab === 0 && sections[0]) {
@@ -16,11 +17,13 @@ export function ScrapTabPanel({ sections, title, tab, setTab }: Props) {
   } else if (tab === 2 && sections.length > 2) {
     displaySections = sections.slice(2);
   }
-  return (
-    <>
-      <ScrapThread displaySections={displaySections} />
-    </>
-  );
+  if (tab === 2) {
+    // その他タブのみアコーディオン
+    return <ScrapThreadAccordion displaySections={displaySections} />;
+  } else {
+    // 要件・やることはリスト表示
+    return <ScrapThreadList displaySections={displaySections} />;
+  }
 }
 
 export function ScrapTabSelector({ tab, setTab }: { tab: number; setTab: (n: number) => void }) {

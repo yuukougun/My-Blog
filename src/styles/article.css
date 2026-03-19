@@ -1,3 +1,61 @@
+/* ScrapアコーディオンUI用 */
+.scrap-accordion-header {
+  cursor: pointer;
+  background: #edf2f7;
+  border-bottom: 2px solid #d6e3ed;
+  padding: 4px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1.2em;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  transition: background 0.15s, margin-bottom 0.15s;
+}
+.scrap-accordion-header.open {
+  margin-bottom: 8px;
+}
+.scrap-accordion-icon {
+  margin-right: 8px;
+  font-size: 12px;
+}
+.scrap-accordion-content {
+  padding: 8px 12px;
+  margin-top: 4px;
+}
+.section-panel-log {
+  padding: 24px;
+}
+.ScrapThread_item__zTzyN {
+  margin-bottom: 24px;
+}
+.section-panel-log .ScrapThread_item__zTzyN {
+  border: 2px solid #d6e3ed;
+  border-radius: 8px;
+}
+.ThreadItemContent_children__xggXO {
+  position: relative;
+  padding-top: 16px;
+}
+.ThreadItemContent_children__xggXO::before {
+  position: absolute;
+  top: 1em;
+  bottom: 0;
+  left: 14px;
+  width: 2px;
+  content: "";
+  background: #d6e3ed;
+}
+.ThreadItemContent_childItem__TC_O8 {
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 1rem;
+}
+.ThreadItemContent_childItem__TC_O8 h2:first-child {
+  margin-top: 0;
+}
+
 /* ScrapタブUI用 */
 .scrap-tab-selector {
   user-select: none;
@@ -5,13 +63,12 @@
 .scrap-tab-btn {
   background: #fff;
   border: none;
-  border-bottom: 2px solid transparent;
   color: #334155;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: 500;
-  padding: 6px 18px;
+  padding: 6px 12px 4px;
   cursor: pointer;
-  transition: color 0.15s, border-bottom 0.15s;
+  transition: color .5s;
 }
 .scrap-tab-btn:hover {
   color: #2563eb;
@@ -29,19 +86,16 @@
     align-items: flex-start;
   }
   .devlog-detail-flex > .devlog-intro {
-    /* flex: 2 1 0; */
     flex: 1;
-    /* min-width: 0; */
     max-width: 800;
   }
   .devlog-detail-flex > .scrap-tab-panel-wrap {
-    /* flex: 1 1 320px; */
     flex: 1;
-
-    /* min-width: 0; */
-    /* max-width: 420px; */
     max-width: 800;
   }
+}
+.scrap-tab-panel-wrap {
+  font-size: 1.2rem;
 }
 .scrap-tab-panel-wrap .section-panel .BodyCommentContent_bodyCommentContainer__PFlLd h1:first-child {
   margin-top: 0;

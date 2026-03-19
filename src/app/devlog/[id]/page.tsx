@@ -3,7 +3,6 @@ import ArticleLayout from "@/components/article/ArticleLayout";
 import { fetchDevLogBySlug } from "@/lib/content/devlog-source";
 import { renderMarkdown } from "@/lib/markdown/remark-plugins";
 import { generateStaticDevLogParams } from "./generateStaticParams";
-import { ScrapThread } from "@/components/article/ScrapThread";
 import ScrapTabPanelWrapper from "@/components/article/ScrapTabPanelWrapper";
 import { extractScrapSections } from "@/lib/content/scrap-extract";
 import type { ScrapSection } from "@/lib/content/scrap-extract";

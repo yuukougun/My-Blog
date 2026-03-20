@@ -37,6 +37,7 @@
 .ThreadItemContent_children__xggXO {
   position: relative;
   padding-top: 16px;
+  padding-left: 40px;
 }
 .ThreadItemContent_children__xggXO::before {
   position: absolute;
@@ -49,13 +50,15 @@
 }
 .ThreadItemContent_childItem__TC_O8 {
   position: relative;
-  padding-left: 40px;
+  /* padding-left: 40px; */
   margin-bottom: 1rem;
 }
 .ThreadItemContent_childItem__TC_O8 h2:first-child {
   margin-top: 0;
 }
-
+.znc .scrap-child-hr {
+  margin-bottom: 10px;
+}
 /* ScrapタブUI用 */
 .scrap-tab-selector {
   user-select: none;
@@ -96,6 +99,9 @@
 }
 .scrap-tab-panel-wrap {
   font-size: 1.2rem;
+}
+.scrap-tab-panel-wrap .section-panel {
+  border-radius: 0 16px 16px 16px;
 }
 .scrap-tab-panel-wrap .section-panel .BodyCommentContent_bodyCommentContainer__PFlLd h1:first-child {
   margin-top: 0;

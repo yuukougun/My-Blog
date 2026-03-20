@@ -38,14 +38,17 @@ export function ScrapThreadAccordion({ displaySections }: { displaySections: Scr
                   {section.children.length > 0 && (
                     <div className="ThreadItemContent_children__xggXO">
                       {section.children.map((child, j) => (
-                        <article className="ThreadItemContent_childItem__TC_O8" key={j}>
-                          <div className="ThreadItemContent_content__Ivb_O">
-                            <div
-                              className="BodyCommentContent_bodyCommentContainer__PFlLd"
-                              dangerouslySetInnerHTML={{ __html: child.content }}
-                            />
-                          </div>
-                        </article>
+                        <React.Fragment key={j}>
+                          <article className="ThreadItemContent_childItem__TC_O8">
+                            <div className="ThreadItemContent_content__Ivb_O">
+                              <div
+                                className="BodyCommentContent_bodyCommentContainer__PFlLd"
+                                dangerouslySetInnerHTML={{ __html: child.content }}
+                              />
+                            </div>
+                          </article>
+                          {j < section.children.length - 1 && <hr className="scrap-child-hr" />}
+                        </React.Fragment>
                       ))}
                     </div>
                   )}
@@ -78,14 +81,17 @@ export function ScrapThreadList({ displaySections }: { displaySections: ScrapSec
               {section.children.length > 0 && (
                 <div className="ThreadItemContent_children__xggXO">
                   {section.children.map((child, j) => (
-                    <article className="ThreadItemContent_childItem__TC_O8" key={j}>
-                      <div className="ThreadItemContent_content__Ivb_O">
-                        <div
-                          className="BodyCommentContent_bodyCommentContainer__PFlLd"
-                          dangerouslySetInnerHTML={{ __html: child.content }}
-                        />
-                      </div>
-                    </article>
+                    <React.Fragment key={j}>
+                      <article className="ThreadItemContent_childItem__TC_O8">
+                        <div className="ThreadItemContent_content__Ivb_O">
+                          <div
+                            className="BodyCommentContent_bodyCommentContainer__PFlLd"
+                            dangerouslySetInnerHTML={{ __html: child.content }}
+                          />
+                        </div>
+                      </article>
+                      {j < section.children.length - 1 && <hr className="scrap-child-hr" />}
+                    </React.Fragment>
                   ))}
                 </div>
               )}

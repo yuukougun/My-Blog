@@ -13,7 +13,7 @@ export async function extractScrapSections(html: string): Promise<ScrapSection[]
   const sectionNodes = doc.querySelectorAll('.ScrapThread_item__zTzyN');
   const sections: ScrapSection[] = [];
 
-  sectionNodes.forEach((sectionNode, idx) => {
+  sectionNodes.forEach((sectionNode: Element, idx: number) => {
     const parentArticle = sectionNode.querySelector('.ThreadItemContent_parentItem__2BweX');
     if (!parentArticle) return;
     const parentContent = parentArticle.querySelector('.ThreadItemContent_content__Ivb_O .BodyCommentContent_bodyCommentContainer__PFlLd');

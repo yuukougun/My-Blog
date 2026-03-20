@@ -26,6 +26,9 @@ export function ScrapThreadAccordion({ displaySections }: { displaySections: Scr
               >
                 <span className="scrap-accordion-icon">{isOpen ? '▼' : '▶'}</span>
                 <span>{section.title}</span>
+                {section.date && (
+                  <span className="scrap-thread-date" style={{ marginLeft: 'auto', color: '#888', fontSize: '0.95em' }}>{section.date}</span>
+                )}
               </div>
               {isOpen && (
                 <article className="ThreadItemContent_parentItem__2BweX scrap-accordion-content">

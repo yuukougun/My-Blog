@@ -60,7 +60,7 @@ export default function ContentCard({ item }: ContentCardProps) {
                 return (
                   <span key={tag} className="content-card-tag">
                     {iconUrl && (
-                      <img src={iconUrl} alt={tag} width={16} height={16} style={{ marginRight: 4, verticalAlign: "middle" }} />
+                      <img src={iconUrl} alt={tag} width={16} height={16} style={{ marginRight: 6, verticalAlign: "middle" }} />
                     )}
                     {tag}
                   </span>

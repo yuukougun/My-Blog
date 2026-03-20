@@ -24,9 +24,7 @@ export async function fetchDevLogsFromZenn(): Promise<DevLogItem[]> {
 
   return items.map((item) => {
     const scrapLink = item.link;
-    if (scrapLink) {
-      console.log(`[DevLog:Zenn] scrapLink for ${item.id}:`, scrapLink);
-    }
+
     return mapDevLog({
       id: item.id,
       slug: item.id,

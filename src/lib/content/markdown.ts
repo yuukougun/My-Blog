@@ -19,9 +19,7 @@ export async function fetchDevLogsFromMarkdown(): Promise<DevLogItem[]> {
 
       const scrapLink = typeof parsed.data["scrap-link"] === "string" ? parsed.data["scrap-link"] :
                         typeof parsed.data.scrapLink === "string" ? parsed.data.scrapLink : undefined;
-      if (scrapLink) {
-        console.log(`[DevLog] scrapLink for ${slug}:`, scrapLink);
-      }
+
       return mapDevLog({
         id: slug,
         slug,

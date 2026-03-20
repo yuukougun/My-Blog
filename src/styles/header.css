@@ -1,3 +1,20 @@
+/* クジラアイコンのホバーアニメーション */
+
+.whale-icon.whale-animating {
+  animation: whale-sway 2s ease-in-out infinite;
+}
+.whale-icon.whale-animating-once {
+  animation: whale-sway 2s ease-in-out 1;
+}
+
+@keyframes whale-sway {
+  0% { transform: translate(-50%, -56%) rotate(0deg); }
+  20% { transform: translate(-50%, -56%) rotate(10deg); }
+  40% { transform: translate(-50%, -56%) rotate(-10deg); }
+  60% { transform: translate(-50%, -56%) rotate(10deg); }
+  80% { transform: translate(-50%, -56%) rotate(-10deg); }
+  100% { transform: translate(-50%, -56%) rotate(0deg); }
+}
 /* デフォルトで非表示（モバイル初期値） */
 .site-nav-desktop {
   display: none;

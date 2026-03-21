@@ -1,112 +1,5 @@
-/* ScrapアコーディオンUI用 */
-.scrap-accordion-header {
-  cursor: pointer;
-  background: #edf2f7;
-  border-bottom: 2px solid #d6e3ed;
-  padding: 4px 16px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 1.2em;
-  margin-bottom: 0;
-  display: flex;
-  align-items: center;
-  user-select: none;
-  transition: background 0.15s, margin-bottom 0.15s;
-}
-.scrap-accordion-header.open {
-  margin-bottom: 8px;
-}
-.scrap-accordion-icon {
-  margin-right: 8px;
-  font-size: 12px;
-}
-.scrap-accordion-content {
-  padding: 8px 12px;
-  margin-top: 4px;
-}
-.section-panel-log {
-  padding: 24px;
-}
-.ScrapThread_item__zTzyN {
-  margin-bottom: 24px;
-}
-.section-panel-log .ScrapThread_item__zTzyN {
-  border: 2px solid #d6e3ed;
-  border-radius: 8px;
-}
-.ThreadItemContent_children__xggXO {
-  position: relative;
-  padding-top: 16px;
-  padding-left: 40px;
-}
-.ThreadItemContent_children__xggXO::before {
-  position: absolute;
-  top: 1em;
-  bottom: 0;
-  left: 14px;
-  width: 2px;
-  content: "";
-  background: #d6e3ed;
-}
-.ThreadItemContent_childItem__TC_O8 {
-  position: relative;
-  /* padding-left: 40px; */
-  margin-bottom: 1rem;
-}
-.ThreadItemContent_childItem__TC_O8 h2:first-child {
-  margin-top: 0;
-}
-.znc .scrap-child-hr {
-  margin-bottom: 10px;
-}
-/* ScrapタブUI用 */
-.scrap-tab-selector {
-  user-select: none;
-}
-.scrap-tab-btn {
-  background: #fff;
-  border: none;
-  color: #334155;
-  font-size: 1em;
-  font-weight: 500;
-  padding: 6px 12px 4px;
-  cursor: pointer;
-  transition: color .5s;
-}
-.scrap-tab-btn:hover {
-  color: #2563eb;
-}
-.scrap-tab-btn.active {
-  color: #2563eb;
-  border-bottom: 2px solid #2563eb;
-  font-weight: 700;
-}
-/* DevLog作品紹介ページ: main.page-wrap直下の.article-layoutと.scrap-tab-panel-wrapを横並び */
-@media (min-width: 1200px) {
-  .devlog-detail-flex {
-    display: flex;
-    gap: 32px;
-    align-items: flex-start;
-  }
-  .devlog-detail-flex > .devlog-intro {
-    flex: 1;
-    max-width: 800;
-  }
-  .devlog-detail-flex > .scrap-tab-panel-wrap {
-    flex: 1;
-    max-width: 800;
-  }
-}
-.scrap-tab-panel-wrap {
-  font-size: 1.2rem;
-}
-.scrap-tab-panel-wrap .section-panel {
-  border-radius: 0 16px 16px 16px;
-}
-.scrap-tab-panel-wrap .section-panel .BodyCommentContent_bodyCommentContainer__PFlLd h1:first-child {
-  margin-top: 0;
-}
-/* タグ部分の折り返し対応（記事用） */
+/* ── 記事タグ ── */
+
 .article-tags {
   display: flex;
   gap: 8px;
@@ -124,31 +17,34 @@
   min-width: 0;
   margin-bottom: 4px;
 }
-/* 記事本体専用 */
+.article-tag-icon {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* ── 記事メタ行 ── */
+
+.article-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.article-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.4rem;
+  margin-left: auto;
+}
+
+/* ── 記事レイアウト ── */
+
 .article-layout {
   border: none;
   background: #ffffff;
   border-radius: 18px;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 14px 32px rgba(37, 99, 235, 0.09);
-  /* 2カラム制御は.page-2colで行う */
-}
-
-/* 2カラム全体ラッパー */
-.page-2col {
-  display: block;
-}
-
-/* Project詳細ページでは最大画面で2カラム、DevLog紹介ページでは1カラム */
-@media (min-width: 1200px) {
-  .page-2col:not(.devlog-intro) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    gap: 0 24px;
-    align-items: flex-start;
-  }
-  .page-2col.devlog-intro {
-    display: block;
-  }
 }
 .article-cover {
   width: 100%;
@@ -167,7 +63,35 @@
   margin: 8px 0 0;
   color: #475569;
 }
-/* ...existing code... */
+.article-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+}
+.article-summary {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* ── 2カラムレイアウト ── */
+
+.page-2col {
+  display: block;
+}
+@media (min-width: 1200px) {
+  .page-2col:not(.devlog-intro) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 0 24px;
+    align-items: flex-start;
+  }
+  .page-2col.devlog-intro {
+    display: block;
+  }
+}
+
+/* ── 記事本文 ── */
+
 .article-body {
   padding: 20px;
   font-size: 1.2rem;
@@ -178,4 +102,3 @@
   white-space: pre-wrap;
   line-height: 1.7;
 }
-/* ...existing code... */

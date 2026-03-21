@@ -5,6 +5,10 @@
   gap: 6px;
   flex-wrap: wrap;
 }
+.content-card-tag-icon {
+  margin-right: 6px;
+  vertical-align: middle;
+}
 .content-card-tag {
   background: #e0efff;
   color: #3b4252;
@@ -86,6 +90,17 @@
   color: #94a3b8;
   font-weight: 600;
   letter-spacing: 0.02em;
+}
+.content-card-meta-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+.content-card-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
 }
 .content-card-body h3 {
   margin: 8px 0 7px;

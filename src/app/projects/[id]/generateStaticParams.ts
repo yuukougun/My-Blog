@@ -1,4 +1,4 @@
-import { getStaticProjectParams } from "@/lib/content/notion";
+import { getStaticProjectParams } from "@/lib/notion/projects";
 
 export async function generateStaticProjectParams() {
   return getStaticProjectParams();

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import type { ScrapSection } from "@/lib/content/scrap-extract";
+import type { ScrapSection } from "@/types/scrap";
 
 
 

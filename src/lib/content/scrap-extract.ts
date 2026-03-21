@@ -1,9 +1,5 @@
-export type ScrapSection = {
-  title: string;
-  content: string;
-  children: ScrapSection[];
-  date?: string;
-};
+export type { ScrapSection } from "@/types/scrap";
+import type { ScrapSection } from "@/types/scrap";
 
 export async function extractScrapSections(html: string): Promise<ScrapSection[]> {
   // jsdomを動的にrequire

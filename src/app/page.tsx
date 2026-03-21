@@ -1,7 +1,7 @@
 
 
 import CardGrid from "@/components/cards/CardGrid";
-import { fetchProjects } from "@/lib/content/notion";
+import { fetchProjects } from "@/lib/notion/projects";
 import { fetchDevLogs } from "@/lib/content/devlog-source";
 import { toCardItem } from "@/lib/content/mapper";
 

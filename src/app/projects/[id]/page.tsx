@@ -2,7 +2,7 @@
 import { notFound } from "next/navigation";
 import ArticleLayout from "@/components/article/ArticleLayout";
 import { renderMarkdown } from "@/lib/markdown/remark-plugins";
-import { fetchProjectBySlug } from "@/lib/content/notion";
+import { fetchProjectBySlug } from "@/lib/notion/projects";
 import { generateStaticProjectParams } from "./generateStaticParams";
 import { deviconMap } from "@/lib/content/deviconMap";
 

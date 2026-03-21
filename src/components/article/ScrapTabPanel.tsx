@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import type { ScrapSection } from "@/lib/content/scrap-extract";
+import type { ScrapSection } from "@/types/scrap";
 import { ScrapThreadAccordion, ScrapThreadList } from "@/components/article/ScrapThread";
-import { redirect } from "next/dist/server/api-utils";
 
 const TAB_LABELS = ["要件", "やること", "Log"];
 

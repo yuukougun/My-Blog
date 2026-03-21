@@ -1,4 +1,4 @@
-import { fetchDevLogsFromNotion } from "@/lib/content/notion-devlog";
+import { fetchDevLogsFromNotion } from "@/lib/notion/devlog";
 import type { DevLogItem } from "@/types/content";
 
 export async function fetchDevLogs(): Promise<DevLogItem[]> {

@@ -1,9 +1,13 @@
 # Portfolio & DevLog Website Requirements
 
+My Blogのwebサイト（まだ開発中）  
+https://gentle-island-056a8c700.6.azurestaticapps.net
+
 ## 1. プロジェクト概要
 本プロジェクトは、エンジニア個人のポートフォリオ兼技術ブログ（DevLog）サイトの開発である。  
 過去の制作物（Projects）と現在進行形の開発記録（DevLog）を管理・公開することを目的とする。  
 コンテンツの管理は外部サービス（Notion, Zenn）で行い、静的サイトとしてビルドして公開するモダンな構成を採用する。
+Notionの情報は`Notion API`、Zenn Scrap記事は`Web Scraping`により取得する。
 
 バイブコーディングを体験するため、開発やデバックは基本的にAIを通して行う。
 
